@@ -1,12 +1,16 @@
 package com.example.moviedb
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.moviedb.databinding.FragmentMovieDetailBinding
 import com.example.moviedb.databinding.FragmentMovieListBinding
 
 
@@ -17,38 +21,27 @@ import com.example.moviedb.databinding.FragmentMovieListBinding
  */
 class MovieDetailFragment : Fragment() {
 
-    private var _binding: FragmentMovieListBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
-    private lateinit var recyclerView: RecyclerView
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-    }
+    // Binding object instance corresponding to the fragment_flavor.xml layout
+    // This property is non-null between the onCreateView() and onDestroyView() lifecycle callbacks,
+    // when the view hierarchy is attached to the fragment.
+    private var binding: FragmentMovieDetailBinding? = null
+    val tag2 ="MovieDetailFragment"
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        _binding = FragmentMovieListBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        val fragmentBinding = FragmentMovieDetailBinding.inflate(inflater, container, false)
+        binding = fragmentBinding
+        Log.d(tag2,"MOVIEEE")
+        return fragmentBinding.root
     }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        recyclerView = binding.recyclerView
-        binding.button.setOnClickListener{binding.recyclerView.findNavController().navigate(MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment("movieEx"))}
-    }
+     /**
+     * This fragment lifecycle method is called when the view hierarchy associated with the fragment
+     * is being removed. As a result, clear out the binding object.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
-
-
-
-
 }
