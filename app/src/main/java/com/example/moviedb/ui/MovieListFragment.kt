@@ -1,4 +1,4 @@
-package com.example.moviedb
+package com.example.moviedb.ui
 
 import android.os.Bundle
 import android.view.*
@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.moviedb.R
 import com.example.moviedb.databinding.FragmentMovieListBinding
 
 // TODO: Rename parameter arguments, choose names that match

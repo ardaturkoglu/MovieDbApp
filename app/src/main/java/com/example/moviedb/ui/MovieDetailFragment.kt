@@ -1,4 +1,4 @@
-package com.example.moviedb
+package com.example.moviedb.ui
 
 import android.os.Bundle
 import android.util.Log

@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".MovieListFragment">
+    tools:context=".ui.MovieListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
