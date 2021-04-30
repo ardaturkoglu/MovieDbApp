@@ -4,30 +4,22 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.R
 import com.example.moviedb.databinding.FragmentMovieListBinding
+import com.example.moviedb.ui.MovieViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MovieListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MovieListFragment : Fragment() {
-    private var _binding: FragmentMovieListBinding? = null
+    private var binding: FragmentMovieListBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private val sharedViewModel: MovieViewModel by activityViewModels()
 
     private lateinit var recyclerView: RecyclerView
+
     // Keeps track of which LayoutManager is in use for the [RecyclerView]
     private var isLinearLayoutManager = true
 
@@ -37,20 +29,23 @@ class MovieListFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         // Retrieve and inflate the layout for this fragment
-        _binding = FragmentMovieListBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        val fragmentBinding = FragmentMovieListBinding.inflate(inflater, container, false)
+        binding = fragmentBinding
+        return fragmentBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        recyclerView = binding.recyclerView
-        // Sets the LayoutManager of the recyclerview
-        // On the first run of the app, it will be LinearLayoutManager
+        recyclerView = binding!!.recyclerView
+        binding?.apply {
+            viewModel = sharedViewModel
+            lifecycleOwner = viewLifecycleOwner
+            movieListFragment = this@MovieListFragment
+        }
         chooseLayout()
     }
 
@@ -59,7 +54,7 @@ class MovieListFragment : Fragment() {
      */
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -89,9 +84,9 @@ class MovieListFragment : Fragment() {
             return
 
         menuItem.icon =
-                if (isLinearLayoutManager)
-                    ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_grid_layout)
-                else ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_linear_layout)
+            if (isLinearLayoutManager)
+                ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_grid_layout)
+            else ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_linear_layout)
     }
 
     /**

@@ -25,7 +25,7 @@ class MovieDetailFragment : Fragment() {
     // This property is non-null between the onCreateView() and onDestroyView() lifecycle callbacks,
     // when the view hierarchy is attached to the fragment.
     private var binding: FragmentMovieDetailBinding? = null
-    val tag2 ="MovieDetailFragment"
+    private val sharedViewModel: MovieViewModel by activityViewModels()
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -33,8 +33,14 @@ class MovieDetailFragment : Fragment() {
     ): View? {
         val fragmentBinding = FragmentMovieDetailBinding.inflate(inflater, container, false)
         binding = fragmentBinding
-        Log.d(tag2,"MOVIEEE")
         return fragmentBinding.root
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding?.apply {
+            viewModel = sharedViewModel
+            lifecycleOwner = viewLifecycleOwner
+            movieDetailFragment = this@MovieDetailFragment
+        }
     }
      /**
      * This fragment lifecycle method is called when the view hierarchy associated with the fragment
