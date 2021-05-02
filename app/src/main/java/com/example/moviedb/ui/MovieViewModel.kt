@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 class MovieViewModel : ViewModel() {
     // Internally, we use a MutableLiveData, because we will be updating the List of Movies
     // with new values
+    //ToDo: Update movies with data from api.
     private val _movies = MutableLiveData<List<MovieInfo>>()
     // The external LiveData interface to the property is immutable, so only this class can modify
     val movies: LiveData<List<MovieInfo>> = _movies
@@ -33,7 +34,7 @@ class MovieViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                _movies.value = retrofitService.getMoviesInfo(apiKey, query)
+                _movies.value = retrofitService.getMovies(apiKey, query)
             } catch (e: Exception) {
                 _movies.value = listOf()
             }

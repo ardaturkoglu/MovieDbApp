@@ -1,4 +1,5 @@
 package com.example.moviedb.network
+import com.example.moviedb.ui.MovieViewModel
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -6,8 +7,11 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-private const val BASE_URL = "https://api.themoviedb.org/3/search/movie?api_key=f019202a38bce5675c2660882dd6669c&language=en-US"
+private const val BASE_URL = "https://api.themoviedb.org/3/"
 //private const val MOVIE_URL = "https://api.themoviedb.org/3/movie/${MovieInfo.movieId}?api_key=f019202a38bce5675c2660882dd6669c&language=en-US"
+//ToDo:Get search query from the search bar.
+//private val sharedViewModel = MovieViewModel()
+val searchQuery=" " //ToDo: change it.
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
@@ -34,9 +38,10 @@ interface MovieDbApi {
      * Returns a [List] of [MovieInfo] and this method can be called from a Coroutine.
      * The @GET annotation indicates that the "photos" endpoint will be requested with the GET
      * HTTP method
+     * Todo: update required queries? get search query from viewmodel. Check getMovies Parameters
      */
-    @GET("/search/movie")
-    suspend fun getMoviesInfo(@Query("api_key") apiKey:String, @Query("query")query:String): List<MovieInfo>
+    @GET("/search/movie?api_key=f019202a38bce5675c2660882dd6669c&query=${getSearchQuery()}")
+    suspend fun getMovies(@Query("api_key") apiKey:String, @Query("query")query:String): List<MovieInfo> //
 }
 
 /**

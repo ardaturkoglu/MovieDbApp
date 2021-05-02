@@ -19,6 +19,8 @@ class MovieAdapter :RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     }
 
     override fun getItemCount(): Int {
+
+        //ToDo: Change to item list count.
         return 1
     }
 
@@ -35,6 +37,7 @@ class MovieAdapter :RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     }
 
     /**
+     * ToDo: update the data from the api.
      * Replaces the content of an existing view with new data
      */
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
@@ -44,6 +47,7 @@ class MovieAdapter :RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
         holder.button.setOnClickListener {
             // Create an action from WordList to DetailList
             // using the required arguments
+            //ToDo:  Give movieName argument.
             val action = MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(movie = "movieExample")
             // Navigate using that action
             holder.view.findNavController().navigate(action)

@@ -25,7 +25,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 /**
  * Main Activity and entry point for the app.
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var navController: NavController
 
