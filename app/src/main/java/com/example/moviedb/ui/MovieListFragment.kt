@@ -28,7 +28,7 @@ class MovieListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
 
     // Keeps track of which LayoutManager is in use for the [RecyclerView]
-    private var isLinearLayoutManager = true
+    private var isLinearLayoutManager = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,17 +63,14 @@ class MovieListFragment : Fragment() {
             override fun onQueryTextChange(p0: String?): Boolean {
             //Start filtering the list as user start entering the characters
                     sharedViewModel.searchQuery.value= p0.toString()
-                Log.d("list","searchText:${sharedViewModel.searchQuery.value}")
-                Log.d("list","movieList:${sharedViewModel.movies.value}")
+                sharedViewModel.getMovies(sharedViewModel.searchQuery.value.toString())
+                sharedViewModel.movies.observe(viewLifecycleOwner, Observer { recyclerView.adapter = MovieAdapter(sharedViewModel.movies.value!!) })
                 return true
         }
     })
        // Log.d("list","searchText:${sharedViewModel.searchQuery.value}")
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        sharedViewModel.getMovies(sharedViewModel.searchQuery.toString())
-        sharedViewModel.movies.observe(viewLifecycleOwner, Observer { recyclerView.adapter = MovieAdapter(sharedViewModel.movies.value!!) })
-       // Log.d("list","movieList:${sharedViewModel.movies.value}")
-//        chooseLayout()
+     chooseLayout()
     }
 
     /**
@@ -103,7 +100,6 @@ class MovieListFragment : Fragment() {
         } else {
             recyclerView.layoutManager = GridLayoutManager(context, 3)
         }
-        recyclerView.adapter = MovieAdapter(sharedViewModel.movies.value!!)
     }
 
     private fun setIcon(menuItem: MenuItem?) {

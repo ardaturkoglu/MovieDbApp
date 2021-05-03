@@ -1,5 +1,6 @@
 package com.example.moviedb.ui
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,10 +18,11 @@ class MovieViewModel : ViewModel() {
 
     val searchQuery = MutableLiveData<String>()
     val movie_detail = MutableLiveData<MovieDetail>()
+    val currentId = MutableLiveData<Int>()
     init{
-        getMovies("ex")
+        //getMovies(searchQuery.value.toString())
     }
-    //var searchQuery : LiveData<String> = _searchQuery
+
     fun getMovies(query: String) {
         viewModelScope.launch {
             try {
@@ -34,7 +36,9 @@ class MovieViewModel : ViewModel() {
     fun showMovieDetail(query: String) {
         viewModelScope.launch {
             try {
-                movie_detail.value = MovieApi.retrofitService.showMovieDetail(query).details
+                movie_detail.value = MovieApi.retrofitService.showMovieDetail(query)
+                Log.d("list","detailTextinfun:$query")
+                Log.d("list","movieListinfun:${movie_detail.value}")
             } catch (e: Exception) {
                 movie_detail.value = null
             }

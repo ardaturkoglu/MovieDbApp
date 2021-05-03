@@ -51,7 +51,7 @@ class MovieAdapter(val movies:List<MovieInfo>) :
                 MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(movie = movie_item.original_title.orEmpty(),id = movie_item.id)
             // Navigate using that action
             findNavController(it).navigate(action)
-            Log.d("list", "Entered movie details")
+
         }
     }
 

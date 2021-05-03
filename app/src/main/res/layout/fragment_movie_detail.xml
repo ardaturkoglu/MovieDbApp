@@ -24,8 +24,8 @@
 
         <ImageView
             android:id="@+id/movie_image"
-            android:layout_width="87dp"
-            android:layout_height="112dp"
+            android:layout_width="142dp"
+            android:layout_height="137dp"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Rating: 7.8"
+            android:text="@{movieDetail.vote_average.toString()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/movie_image"
@@ -57,47 +57,47 @@
 
         <TextView
             android:id="@+id/overview_text"
-            android:layout_width="235dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="44dp"
             android:layout_marginEnd="32dp"
             android:autofillHints=""
             android:ems="10"
             android:gravity="start|top"
-            android:text=" hello  hello  hello  hello hello hello hello hello hello hello hello hello"
+            android:text="@{movieDetail.overview}"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/movie_image"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/overview_text2"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="32dp"
             android:autofillHints=""
             android:ems="10"
             android:gravity="start|top"
-            android:inputType="textMultiLine"
-            android:text=" hello  hello  hello  hello hello hello hello hello hello hello hello hello"
+            android:text=""
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/movie_image"
             app:layout_constraintTop_toBottomOf="@+id/overview_text"
-            app:layout_constraintVertical_bias="0.077"
-            android:layout_width="wrap_content" />
+            app:layout_constraintVertical_bias="0.065" />
 
         <TextView
             android:id="@+id/genreView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:text="@string/genre"
             app:layout_constraintBottom_toTopOf="@+id/overview_text2"
             app:layout_constraintStart_toEndOf="@+id/movie_image"
             app:layout_constraintTop_toBottomOf="@+id/overview_text"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

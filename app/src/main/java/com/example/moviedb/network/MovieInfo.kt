@@ -18,7 +18,7 @@ data class Base(
 data class MovieDetail(
         @Json(name ="poster_path") val poster_path : String?,
         @Json(name ="overview") val overview: String?,
-        //@Json(name ="genre_ids") val genre_ids:List<Object>?,
+        @Json(name ="genres") val genre_ids:List<Any>?,
         @Json(name ="original_title") val original_title:String?,
         @Json(name ="backdrop_path") val backdrop_path:String?,
         @Json(name ="vote_average") val vote_average:Float?

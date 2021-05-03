@@ -4,6 +4,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.themoviedb.org/3/"
@@ -32,8 +33,8 @@ interface MovieDbApi {
 
     @GET("search/movie?api_key=f019202a38bce5675c2660882dd6669c&include_adult=false")
     suspend fun getMovies(@Query("query") query: String):Base //
-    @GET("/movies/")
-    suspend fun showMovieDetail(@Query("query") query: String):ObjectName
+    @GET("movie/{id}?api_key=f019202a38bce5675c2660882dd6669c")
+    suspend fun showMovieDetail(@Path("id") id: String):MovieDetail
 }
 
 /**

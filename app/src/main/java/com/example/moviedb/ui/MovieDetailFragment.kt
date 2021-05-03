@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.moviedb.databinding.FragmentMovieDetailBinding
-import com.example.moviedb.network.MovieApi
 
 
 /**
@@ -38,8 +37,8 @@ class MovieDetailFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             movieDetailFragment = this@MovieDetailFragment
         }
-        sharedViewModel.showMovieDetail("$25?/api_key=f019202a38bce5675c2660882dd6669c")
-        binding?.movieDetail=sharedViewModel.movie_detail.value
+        sharedViewModel.showMovieDetail("667388")
+        binding?.movieDetail = sharedViewModel.movie_detail.value
 
     }
 
