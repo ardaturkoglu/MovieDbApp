@@ -11,7 +11,10 @@
 
         <variable
             name="movieDetailFragment"
-            type="com.example.moviedb.ui.MovieDetailFragment" />
+            type="com.example.moviedb.ui.MovieDetailFragment"/>
+        <variable
+            name="movieDetail"
+            type="com.example.moviedb.network.MovieDetail"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,7 +55,7 @@
             app:layout_constraintBottom_toTopOf="@+id/overview_text"
             app:layout_constraintStart_toEndOf="@+id/movie_image" />
 
-        <EditText
+        <TextView
             android:id="@+id/overview_text"
             android:layout_width="235dp"
             android:layout_height="wrap_content"
@@ -62,13 +65,12 @@
             android:autofillHints=""
             android:ems="10"
             android:gravity="start|top"
-            android:inputType="textMultiLine"
             android:text=" hello  hello  hello  hello hello hello hello hello hello hello hello hello"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/movie_image"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
+        <TextView
             android:id="@+id/overview_text2"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"

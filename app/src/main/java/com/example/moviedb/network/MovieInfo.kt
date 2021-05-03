@@ -1,9 +1,29 @@
 package com.example.moviedb.network
 
-//ToDo: Change?
+import com.squareup.moshi.Json
+
 data class MovieInfo (
-        val title:String,
-        val rating: Double,
-        val overview:String
-        //val posterImage
+        @Json(name ="poster_path") val poster_path : String?,
+        @Json(name ="overview") val overview: String?,
+        @Json(name ="genre_ids") val genre_ids:List<Int>?,
+        @Json(name ="id") val id:Int,
+        @Json(name ="original_title") val original_title:String?,
+        @Json(name ="backdrop_path") val backdrop_path:String?,
+        @Json(name ="vote_average") val vote_average:Float?
+)
+data class Base(
+        @Json(name="results") val results:List<MovieInfo>,
+        @Json(name="page") val page:Int
+)
+data class MovieDetail(
+        @Json(name ="poster_path") val poster_path : String?,
+        @Json(name ="overview") val overview: String?,
+        //@Json(name ="genre_ids") val genre_ids:List<Object>?,
+        @Json(name ="original_title") val original_title:String?,
+        @Json(name ="backdrop_path") val backdrop_path:String?,
+        @Json(name ="vote_average") val vote_average:Float?
+
+)
+data class ObjectName(
+        @Json (name="object") val details:MovieDetail
 )

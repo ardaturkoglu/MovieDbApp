@@ -1,17 +1,13 @@
 package com.example.moviedb.ui
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.databinding.FragmentMovieDetailBinding
-import com.example.moviedb.databinding.FragmentMovieListBinding
+import com.example.moviedb.network.MovieApi
 
 
 /**
@@ -28,21 +24,26 @@ class MovieDetailFragment : Fragment() {
     private val sharedViewModel: MovieViewModel by activityViewModels()
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val fragmentBinding = FragmentMovieDetailBinding.inflate(inflater, container, false)
         binding = fragmentBinding
         return fragmentBinding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding?.apply {
             viewModel = sharedViewModel
             lifecycleOwner = viewLifecycleOwner
             movieDetailFragment = this@MovieDetailFragment
         }
+        sharedViewModel.showMovieDetail("$25?/api_key=f019202a38bce5675c2660882dd6669c")
+        binding?.movieDetail=sharedViewModel.movie_detail.value
+
     }
-     /**
+
+    /**
      * This fragment lifecycle method is called when the view hierarchy associated with the fragment
      * is being removed. As a result, clear out the binding object.
      */
@@ -50,4 +51,5 @@ class MovieDetailFragment : Fragment() {
         super.onDestroyView()
         binding = null
     }
+
 }

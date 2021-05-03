@@ -1,17 +1,24 @@
 package com.example.moviedb.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.R
 import com.example.moviedb.databinding.FragmentMovieListBinding
-import com.example.moviedb.ui.MovieViewModel
+import com.example.moviedb.network.MovieApi
+import com.example.moviedb.network.MovieInfo
+import kotlinx.coroutines.launch
 
 class MovieListFragment : Fragment() {
     private var binding: FragmentMovieListBinding? = null
@@ -37,6 +44,7 @@ class MovieListFragment : Fragment() {
         val fragmentBinding = FragmentMovieListBinding.inflate(inflater, container, false)
         binding = fragmentBinding
         return fragmentBinding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,7 +54,26 @@ class MovieListFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             movieListFragment = this@MovieListFragment
         }
-        chooseLayout()
+        binding!!.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                sharedViewModel.searchQuery.value= query.toString()
+                return true
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+            //Start filtering the list as user start entering the characters
+                    sharedViewModel.searchQuery.value= p0.toString()
+                Log.d("list","searchText:${sharedViewModel.searchQuery.value}")
+                Log.d("list","movieList:${sharedViewModel.movies.value}")
+                return true
+        }
+    })
+       // Log.d("list","searchText:${sharedViewModel.searchQuery.value}")
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        sharedViewModel.getMovies(sharedViewModel.searchQuery.toString())
+        sharedViewModel.movies.observe(viewLifecycleOwner, Observer { recyclerView.adapter = MovieAdapter(sharedViewModel.movies.value!!) })
+       // Log.d("list","movieList:${sharedViewModel.movies.value}")
+//        chooseLayout()
     }
 
     /**
@@ -76,7 +103,7 @@ class MovieListFragment : Fragment() {
         } else {
             recyclerView.layoutManager = GridLayoutManager(context, 3)
         }
-        recyclerView.adapter = MovieAdapter()
+        recyclerView.adapter = MovieAdapter(sharedViewModel.movies.value!!)
     }
 
     private fun setIcon(menuItem: MenuItem?) {
@@ -103,12 +130,10 @@ class MovieListFragment : Fragment() {
 
                 return true
             }
-            // Otherwise, do nothing and use the core event handling
-
-            // when clauses require that all possible paths be accounted for explicitly,
-            // for instance both the true and false cases if the value is a Boolean,
-            // or an else to catch all unhandled cases.
             else -> super.onOptionsItemSelected(item)
         }
     }
-}
+
+    }
+
+
