@@ -36,11 +36,12 @@ class MovieDetailFragment : Fragment() {
             val currentId: Int = MovieDetailFragmentArgs.fromBundle(requireArguments()).id
             sharedViewModel.showMovieDetail(currentId.toString())
         }
-        sharedViewModel.movie_detail.value?.genres?.forEach { genreList+= it.genre_name + " ," }
+
         sharedViewModel.movie_detail.observe(viewLifecycleOwner, Observer {
             binding?.movieDetail = sharedViewModel.movie_detail.value
             Glide.with(binding!!.root).load("https://image.tmdb.org/t/p/original/${sharedViewModel.movie_detail.value?.poster_path}").into(
                 binding!!.movieImage)
+            sharedViewModel.movie_detail.value?.genres?.forEach { genreList+= it.genre_name + " " }
             binding?.overviewText2?.text=genreList
         })
 
