@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.example.moviedb.databinding.FragmentMovieDetailBinding
 
@@ -33,17 +34,13 @@ class MovieDetailFragment : Fragment() {
         if (arguments != null) {
             val currentId: Int = MovieDetailFragmentArgs.fromBundle(requireArguments()).id
             sharedViewModel.showMovieDetail(currentId.toString())
-            //sharedViewModel.movie_detail.value?.genreStrings?.add(sharedViewModel.movie_detail.value?.genres?.forEach{it.genre_name}
-              //  .toString())
-            binding?.movieDetail = sharedViewModel.movie_detail.value
-            Log.d(
-                "listarda","genre details:${sharedViewModel.movie_detail.value?.genres}"
-            )
-//
-//            Log.d("listarda", "overview details:${sharedViewModel.movie_detail.value?.overview.toString()}")
         }
-        Glide.with(binding!!.root).load("https://image.tmdb.org/t/p/original/${sharedViewModel.movie_detail.value?.poster_path}").into(
-            binding!!.movieImage)
+        sharedViewModel.movie_detail.observe(viewLifecycleOwner, Observer {
+            binding?.movieDetail = sharedViewModel.movie_detail.value
+            Glide.with(binding!!.root).load("https://image.tmdb.org/t/p/original/${sharedViewModel.movie_detail.value?.poster_path}").into(
+                binding!!.movieImage)
+        })
+
         return fragmentBinding.root
     }
 
