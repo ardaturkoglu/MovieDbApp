@@ -1,27 +1,24 @@
 package com.example.moviedb.ui
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.*
 import android.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.R
 import com.example.moviedb.databinding.FragmentMovieListBinding
-import com.example.moviedb.network.MovieApi
-import com.example.moviedb.network.MovieInfo
-import kotlinx.coroutines.launch
+
 
 class MovieListFragment : Fragment() {
     private var binding: FragmentMovieListBinding? = null
+    var state: Parcelable? = null
 
     private val sharedViewModel: MovieViewModel by activityViewModels()
 
@@ -56,18 +53,22 @@ class MovieListFragment : Fragment() {
         }
         binding!!.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                sharedViewModel.searchQuery.value= query.toString()
+                sharedViewModel.searchQuery.value = query.toString()
                 return true
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
-            //Start filtering the list as user start entering the characters
-                    sharedViewModel.searchQuery.value= p0.toString()
+                //Start filtering the list as user start entering the characters
+                sharedViewModel.searchQuery.value = p0.toString()
                 sharedViewModel.getMovies(sharedViewModel.searchQuery.value.toString())
-                sharedViewModel.movies.observe(viewLifecycleOwner, Observer { recyclerView.adapter = MovieAdapter(sharedViewModel.movies.value!!) })
+                sharedViewModel.movies.observe(viewLifecycleOwner, Observer {
+                    recyclerView.adapter = MovieAdapter(
+                        sharedViewModel.movies.value!!
+                    )
+                })
                 return true
-        }
-    })
+            }
+        })
        // Log.d("list","searchText:${sharedViewModel.searchQuery.value}")
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
      chooseLayout()
@@ -128,6 +129,15 @@ class MovieListFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+    override fun onPause() {
+        super.onPause()
+        state = recyclerView.layoutManager!!.onSaveInstanceState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        recyclerView.layoutManager!!.onRestoreInstanceState(state)
     }
 
     }

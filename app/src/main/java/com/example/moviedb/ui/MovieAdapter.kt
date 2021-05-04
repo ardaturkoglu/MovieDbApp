@@ -1,6 +1,5 @@
 package com.example.moviedb.ui
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.Navigation.findNavController
@@ -20,8 +19,6 @@ class MovieAdapter(val movies:List<MovieInfo>) :
             fun bind(movieInfo: MovieInfo) {
                 binding.movieInfo= movieInfo
                 Glide.with(binding.root).load("https://image.tmdb.org/t/p/original/${binding.movieInfo!!.poster_path}").into(binding.imageButton)
-                // This is important, because it forces the data binding to execute immediately,
-                // which allows the RecyclerView to make the correct view size measurements
                 binding.executePendingBindings()
             }
     }

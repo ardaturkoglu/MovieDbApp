@@ -31,12 +31,16 @@ class MovieDetailFragment : Fragment() {
         val fragmentBinding = FragmentMovieDetailBinding.inflate(inflater, container, false)
         binding = fragmentBinding
         if (arguments != null) {
-            // The getPrivacyPolicyLink() method will be created automatically.
             val currentId: Int = MovieDetailFragmentArgs.fromBundle(requireArguments()).id
             sharedViewModel.showMovieDetail(currentId.toString())
+            //sharedViewModel.movie_detail.value?.genreStrings?.add(sharedViewModel.movie_detail.value?.genres?.forEach{it.genre_name}
+              //  .toString())
             binding?.movieDetail = sharedViewModel.movie_detail.value
-            Log.d("listarda", "genre details:${sharedViewModel.movie_detail.value?.genres.toString()}")
-            Log.d("listarda", "overview details:${sharedViewModel.movie_detail.value?.overview.toString()}")
+            Log.d(
+                "listarda","genre details:${sharedViewModel.movie_detail.value?.genres}"
+            )
+//
+//            Log.d("listarda", "overview details:${sharedViewModel.movie_detail.value?.overview.toString()}")
         }
         Glide.with(binding!!.root).load("https://image.tmdb.org/t/p/original/${sharedViewModel.movie_detail.value?.poster_path}").into(
             binding!!.movieImage)
