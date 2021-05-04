@@ -12,13 +12,14 @@
     android:id="@+id/movie_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:contentDescription="movie_item">
 
 
     <ImageView
         android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:src="@android:drawable/ic_menu_gallery"
         tools:srcCompat="@tools:sample/avatars" />
 

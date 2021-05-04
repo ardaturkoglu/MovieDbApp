@@ -38,13 +38,13 @@
             android:id="@+id/rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="88dp"
             android:text="@{movieDetail.vote_average.toString()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/movie_image"
             app:layout_constraintVertical_bias="0.0"
-            tools:text="Rating: 7.8" />
+            tools:text="7.8" />
 
         <TextView
             android:id="@+id/overViewtextView"
@@ -80,7 +80,7 @@
             android:autofillHints=""
             android:ems="10"
             android:gravity="start|top"
-            android:text=""
+            android:text="@{movieDetail.genres.toString()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -93,11 +93,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:text="@string/genre"
+            android:text="Genres:"
             app:layout_constraintBottom_toTopOf="@+id/overview_text2"
             app:layout_constraintStart_toEndOf="@+id/movie_image"
             app:layout_constraintTop_toBottomOf="@+id/overview_text"
             app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:text="Rating: "
+            app:layout_constraintEnd_toStartOf="@+id/rating"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/movie_image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

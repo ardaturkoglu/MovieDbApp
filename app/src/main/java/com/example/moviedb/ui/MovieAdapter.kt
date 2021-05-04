@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.moviedb.databinding.MovieItemBinding
 import com.example.moviedb.network.MovieInfo
 
@@ -18,6 +19,7 @@ class MovieAdapter(val movies:List<MovieInfo>) :
     ) : RecyclerView.ViewHolder(binding.root) {
             fun bind(movieInfo: MovieInfo) {
                 binding.movieInfo= movieInfo
+                Glide.with(binding.root).load("https://image.tmdb.org/t/p/original/${binding.movieInfo!!.poster_path}").into(binding.imageButton)
                 // This is important, because it forces the data binding to execute immediately,
                 // which allows the RecyclerView to make the correct view size measurements
                 binding.executePendingBindings()

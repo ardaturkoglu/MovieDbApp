@@ -1,11 +1,13 @@
 package com.example.moviedb.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.bumptech.glide.Glide
 import com.example.moviedb.databinding.FragmentMovieDetailBinding
 
 
@@ -28,6 +30,16 @@ class MovieDetailFragment : Fragment() {
     ): View? {
         val fragmentBinding = FragmentMovieDetailBinding.inflate(inflater, container, false)
         binding = fragmentBinding
+        if (arguments != null) {
+            // The getPrivacyPolicyLink() method will be created automatically.
+            val currentId: Int = MovieDetailFragmentArgs.fromBundle(requireArguments()).id
+            sharedViewModel.showMovieDetail(currentId.toString())
+            binding?.movieDetail = sharedViewModel.movie_detail.value
+            Log.d("listarda", "genre details:${sharedViewModel.movie_detail.value?.genres.toString()}")
+            Log.d("listarda", "overview details:${sharedViewModel.movie_detail.value?.overview.toString()}")
+        }
+        Glide.with(binding!!.root).load("https://image.tmdb.org/t/p/original/${sharedViewModel.movie_detail.value?.poster_path}").into(
+            binding!!.movieImage)
         return fragmentBinding.root
     }
 
@@ -37,8 +49,7 @@ class MovieDetailFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             movieDetailFragment = this@MovieDetailFragment
         }
-        sharedViewModel.showMovieDetail("667388")
-        binding?.movieDetail = sharedViewModel.movie_detail.value
+
 
     }
 
