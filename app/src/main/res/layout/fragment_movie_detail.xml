@@ -80,7 +80,7 @@
             android:autofillHints=""
             android:ems="10"
             android:gravity="start|top"
-            android:text="@{movieDetail.genres.toString()}"
+            android:text=""
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

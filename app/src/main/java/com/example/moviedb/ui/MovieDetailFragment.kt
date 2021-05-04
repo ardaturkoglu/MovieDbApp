@@ -24,6 +24,7 @@ class MovieDetailFragment : Fragment() {
     // when the view hierarchy is attached to the fragment.
     private var binding: FragmentMovieDetailBinding? = null
     private val sharedViewModel: MovieViewModel by activityViewModels()
+    var genreList: String? =""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,10 +36,12 @@ class MovieDetailFragment : Fragment() {
             val currentId: Int = MovieDetailFragmentArgs.fromBundle(requireArguments()).id
             sharedViewModel.showMovieDetail(currentId.toString())
         }
+        sharedViewModel.movie_detail.value?.genres?.forEach { genreList+= it.genre_name + " ," }
         sharedViewModel.movie_detail.observe(viewLifecycleOwner, Observer {
             binding?.movieDetail = sharedViewModel.movie_detail.value
             Glide.with(binding!!.root).load("https://image.tmdb.org/t/p/original/${sharedViewModel.movie_detail.value?.poster_path}").into(
                 binding!!.movieImage)
+            binding?.overviewText2?.text=genreList
         })
 
         return fragmentBinding.root
