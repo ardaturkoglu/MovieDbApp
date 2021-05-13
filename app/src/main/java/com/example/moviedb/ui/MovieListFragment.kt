@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.util.Log
 import android.view.*
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -51,6 +52,14 @@ class MovieListFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             movieListFragment = this@MovieListFragment
         }
+        sharedViewModel.status.observe(viewLifecycleOwner, Observer {
+            when(sharedViewModel.status.value)
+            {
+                MovieApiStatus.LOADING -> Toast.makeText(context,"Movies are loading.",Toast.LENGTH_SHORT).show()
+                MovieApiStatus.ERROR -> Toast.makeText(context,"Cannot load movies.",Toast.LENGTH_SHORT).show()
+                MovieApiStatus.DONE -> Toast.makeText(context,"Movies loaded successfully.",Toast.LENGTH_SHORT).show()
+            }
+        })
         binding!!.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 sharedViewModel.searchQuery.value = query.toString()
@@ -66,6 +75,8 @@ class MovieListFragment : Fragment() {
                         sharedViewModel.movies.value!!
                     )
                 })
+
+
                 return true
             }
         })

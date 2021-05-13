@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -43,6 +44,16 @@ class MovieDetailFragment : Fragment() {
                 binding!!.movieImage)
             sharedViewModel.movie_detail.value?.genres?.forEach { genreList+= it.genre_name + " " }
             binding?.overviewText2?.text=genreList
+            genreList = ""
+        })
+
+        sharedViewModel.status.observe(viewLifecycleOwner, Observer {
+            when(sharedViewModel.status.value)
+            {
+                MovieApiStatus.DETAIL_LOADING -> Toast.makeText(context,"Movie detail is loading...", Toast.LENGTH_SHORT).show()
+                MovieApiStatus.DETAIL_ERROR -> Toast.makeText(context,"Cannot load movie details.", Toast.LENGTH_SHORT).show()
+                MovieApiStatus.DETAIL_LOADED -> Toast.makeText(context,"Movie detail loaded successfully.", Toast.LENGTH_SHORT).show()
+            }
         })
 
         return fragmentBinding.root
