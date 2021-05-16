@@ -13,7 +13,9 @@ data class MovieInfo (
 )
 data class Base(
         @Json(name="results") val results:List<MovieInfo>,
-        @Json(name="page") val page:Int
+        @Json(name="page") val pageNo:Int,
+        @Json(name="total_pages") val pageTotal:Int
+
 )
 data class MovieDetail(
         @Json(name ="poster_path") val poster_path : String?,

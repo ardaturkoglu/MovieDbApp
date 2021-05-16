@@ -5,32 +5,37 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviedb.network.MovieApi
+import com.example.moviedb.network.MovieApiStatus
 import com.example.moviedb.network.MovieDetail
 import com.example.moviedb.network.MovieInfo
 import kotlinx.coroutines.launch
 
-enum class MovieApiStatus
-{
-    ERROR,LOADING,DONE,DETAIL_LOADED,DETAIL_ERROR,DETAIL_LOADING
-}
+
 class MovieViewModel : ViewModel() {
     // Internally, we use a MutableLiveData, because we will be updating the List of Movies
     // with new values
-    val movies = MutableLiveData<List<MovieInfo>>()
-
-
+    val movies = MutableLiveData<List<MovieInfo>>(listOf())
 
     val searchQuery = MutableLiveData<String>()
     val movie_detail = MutableLiveData<MovieDetail>()
-    val currentId = MutableLiveData<Int>()
+    val totalPage = MutableLiveData<Int>()
     val status = MutableLiveData<MovieApiStatus>()
+    val currentPage = MutableLiveData<Int>(1)
+    var isSearching = false
 
 
-    fun getMovies(query: String) {
+    fun getMovies(query: String,page:Int) : List<MovieInfo>? {
         viewModelScope.launch {
             status.value = MovieApiStatus.LOADING
             try {
-                movies.value = MovieApi.retrofitService.getMovies(query).results
+                if(isSearching) {
+                    movies.value = MovieApi.retrofitService.getMovies(query, page).results
+                }
+                else {
+                    movies.value =
+                        movies.value?.plus(MovieApi.retrofitService.getMovies(query, page).results)
+                }
+                totalPage.value = MovieApi.retrofitService.getMovies(query,page).pageTotal
                 status.value = MovieApiStatus.DONE
             } catch (e: Exception) {
                 movies.value = listOf()
@@ -38,6 +43,7 @@ class MovieViewModel : ViewModel() {
                 Log.d("ardaError",e.toString())
             }
         }
+        return movies.value
 
     }
     fun showMovieDetail(query: String) {

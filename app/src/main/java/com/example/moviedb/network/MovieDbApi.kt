@@ -32,7 +32,7 @@ private val retrofit = Retrofit.Builder()
 interface MovieDbApi {
 
     @GET("search/movie?api_key=f019202a38bce5675c2660882dd6669c&include_adult=false")
-    suspend fun getMovies(@Query("query") query: String):Base //
+    suspend fun getMovies(@Query("query") query: String,@Query("page") page:Int):Base //
     @GET("movie/{id}?api_key=f019202a38bce5675c2660882dd6669c")
     suspend fun showMovieDetail(@Path("id") id: String):MovieDetail
 }
@@ -42,4 +42,8 @@ interface MovieDbApi {
  */
 object MovieApi {
     val retrofitService: MovieDbApi by lazy { retrofit.create(MovieDbApi::class.java) }
+}
+enum class MovieApiStatus
+{
+    ERROR,LOADING,DONE,DETAIL_LOADED,DETAIL_ERROR,DETAIL_LOADING
 }

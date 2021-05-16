@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.example.moviedb.databinding.FragmentMovieDetailBinding
+import com.example.moviedb.network.MovieApiStatus
 
 
 /**
@@ -33,6 +34,17 @@ class MovieDetailFragment : Fragment() {
     ): View? {
         val fragmentBinding = FragmentMovieDetailBinding.inflate(inflater, container, false)
         binding = fragmentBinding
+        binding?.apply {
+            viewModel = sharedViewModel
+            lifecycleOwner = viewLifecycleOwner
+            movieDetailFragment = this@MovieDetailFragment
+        }
+
+        return fragmentBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         if (arguments != null) {
             val currentId: Int = MovieDetailFragmentArgs.fromBundle(requireArguments()).id
             sharedViewModel.showMovieDetail(currentId.toString())
@@ -55,16 +67,6 @@ class MovieDetailFragment : Fragment() {
                 MovieApiStatus.DETAIL_LOADED -> Toast.makeText(context,"Movie detail loaded successfully.", Toast.LENGTH_SHORT).show()
             }
         })
-
-        return fragmentBinding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding?.apply {
-            viewModel = sharedViewModel
-            lifecycleOwner = viewLifecycleOwner
-            movieDetailFragment = this@MovieDetailFragment
-        }
 
 
     }

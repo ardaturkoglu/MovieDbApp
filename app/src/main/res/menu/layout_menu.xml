@@ -15,9 +15,4 @@
      limitations under the License.
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_switch_layout"
-        android:title="@string/action_switch_layout"
-        android:icon="@drawable/ic_linear_layout"
-        app:showAsAction="always" />
-</menu>
+    xmlns:app="http://schemas.android.com/apk/res-auto"/>

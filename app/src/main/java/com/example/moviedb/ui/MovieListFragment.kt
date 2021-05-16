@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
 import android.view.*
+import android.widget.AbsListView
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.R
 import com.example.moviedb.databinding.FragmentMovieListBinding
+import com.example.moviedb.network.MovieApiStatus
 
 
 class MovieListFragment : Fragment() {
@@ -24,9 +26,7 @@ class MovieListFragment : Fragment() {
     private val sharedViewModel: MovieViewModel by activityViewModels()
 
     private lateinit var recyclerView: RecyclerView
-
-    // Keeps track of which LayoutManager is in use for the [RecyclerView]
-    private var isLinearLayoutManager = false
+    private var isScrolling = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +47,13 @@ class MovieListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = binding!!.recyclerView
+        recyclerView.addOnScrollListener(this.onScrollListener)
         binding?.apply {
             viewModel = sharedViewModel
             lifecycleOwner = viewLifecycleOwner
             movieListFragment = this@MovieListFragment
         }
+
         sharedViewModel.status.observe(viewLifecycleOwner, Observer {
             when(sharedViewModel.status.value)
             {
@@ -60,6 +62,7 @@ class MovieListFragment : Fragment() {
                 MovieApiStatus.DONE -> Toast.makeText(context,"Movies loaded successfully.",Toast.LENGTH_SHORT).show()
             }
         })
+
         binding!!.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 sharedViewModel.searchQuery.value = query.toString()
@@ -68,21 +71,22 @@ class MovieListFragment : Fragment() {
 
             override fun onQueryTextChange(p0: String?): Boolean {
                 //Start filtering the list as user start entering the characters
+                sharedViewModel.isSearching =true
+                sharedViewModel.currentPage.value = 1
                 sharedViewModel.searchQuery.value = p0.toString()
-                sharedViewModel.getMovies(sharedViewModel.searchQuery.value.toString())
-                sharedViewModel.movies.observe(viewLifecycleOwner, Observer {
-                    recyclerView.adapter = MovieAdapter(
-                        sharedViewModel.movies.value!!
-                    )
-                })
-
+                sharedViewModel.getMovies(sharedViewModel.searchQuery.value.toString(),
+                    sharedViewModel.currentPage.value!!
+                )
+                sharedViewModel.isSearching =false
 
                 return true
             }
         })
-       // Log.d("list","searchText:${sharedViewModel.searchQuery.value}")
-        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-     chooseLayout()
+        sharedViewModel.movies.observe(viewLifecycleOwner, Observer {
+            recyclerView.adapter = MovieAdapter(
+                sharedViewModel.movies.value!!
+            )
+        })
     }
 
     /**
@@ -96,51 +100,36 @@ class MovieListFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.layout_menu, menu)
 
-        val layoutButton = menu.findItem(R.id.action_switch_layout)
-        setIcon(layoutButton)
     }
-
-    /**
-     * Sets the LayoutManager for the [RecyclerView] based on the desired orientation of the list.
-     *
-     * Notice that because the enclosing class has changed from an Activity to a Fragment,
-     * the signature of the LayoutManagers has to slightly change.
-     */
-    private fun chooseLayout() {
-        if (isLinearLayoutManager) {
-            recyclerView.layoutManager = LinearLayoutManager(context)
-        } else {
-            recyclerView.layoutManager = GridLayoutManager(context, 3)
-        }
-    }
-
-    private fun setIcon(menuItem: MenuItem?) {
-        if (menuItem == null)
-            return
-
-        menuItem.icon =
-            if (isLinearLayoutManager)
-                ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_grid_layout)
-            else ContextCompat.getDrawable(this.requireContext(), R.drawable.ic_linear_layout)
-    }
-
-    /**
-     * Determines how to handle interactions with the selected [MenuItem]
-     */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_switch_layout -> {
-                // Sets isLinearLayoutManager (a Boolean) to the opposite value
-                isLinearLayoutManager = !isLinearLayoutManager
-                // Sets layout and icon
-                chooseLayout()
-                setIcon(item)
-
-                return true
+    private val onScrollListener =object : RecyclerView.OnScrollListener() {
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+            {
+                isScrolling = true
             }
-            else -> super.onOptionsItemSelected(item)
+        }
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val layoutManager = binding?.recyclerView?.layoutManager as GridLayoutManager
+            val sizeOfCurrentList = layoutManager.itemCount
+            val visibleItems = layoutManager.childCount
+            val topPosition = layoutManager.findFirstVisibleItemPosition()
+
+            val isEnd = topPosition + visibleItems >= sizeOfCurrentList
+            val shouldPaginate = sharedViewModel.status.value != MovieApiStatus.LOADING  && isEnd && isScrolling
+            if(shouldPaginate && (sharedViewModel.currentPage.value!! <= sharedViewModel.totalPage.value!!))
+            {
+                sharedViewModel.currentPage.value = sharedViewModel.currentPage.value?.plus(1)
+                sharedViewModel.getMovies(sharedViewModel.searchQuery.value.toString(),
+                    sharedViewModel.currentPage.value!!
+                )
+
+            }
         }
     }
+
     override fun onPause() {
         super.onPause()
         state = recyclerView.layoutManager!!.onSaveInstanceState()
