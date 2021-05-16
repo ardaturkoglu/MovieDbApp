@@ -3,17 +3,25 @@ package com.example.moviedb.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.Navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.moviedb.MovieDiffUtil
 import com.example.moviedb.databinding.MovieItemBinding
 import com.example.moviedb.network.MovieInfo
 
-class MovieAdapter(val movies:List<MovieInfo>) :
+class MovieAdapter(var movies:List<MovieInfo>) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     /**
      * Provides a reference for the views needed to display items in your list.
      */
+    fun updateList(newMovies: List<MovieInfo>) {
+        val diffCallBack = MovieDiffUtil(movies, newMovies)
+        val diffResult = DiffUtil.calculateDiff(diffCallBack)
+        diffResult.dispatchUpdatesTo(this)
 
+        movies = newMovies
+    }
     class MovieViewHolder( var binding: MovieItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
             fun bind(movieInfo: MovieInfo) {

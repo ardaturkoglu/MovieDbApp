@@ -48,6 +48,10 @@ class MovieListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = binding!!.recyclerView
         recyclerView.addOnScrollListener(this.onScrollListener)
+        recyclerView.adapter = MovieAdapter(
+            sharedViewModel.movies.value!!
+        )
+        recyclerView.adapter?.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
         binding?.apply {
             viewModel = sharedViewModel
             lifecycleOwner = viewLifecycleOwner
@@ -83,9 +87,7 @@ class MovieListFragment : Fragment() {
             }
         })
         sharedViewModel.movies.observe(viewLifecycleOwner, Observer {
-            recyclerView.adapter = MovieAdapter(
-                sharedViewModel.movies.value!!
-            )
+            (recyclerView.adapter as MovieAdapter).updateList(sharedViewModel.movies.value!!)
         })
     }
 
