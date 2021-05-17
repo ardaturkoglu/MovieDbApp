@@ -30,6 +30,7 @@ class MovieListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedViewModel.movies.value = sharedViewModel.topMovies.value
         setHasOptionsMenu(true)
     }
 
@@ -41,12 +42,14 @@ class MovieListFragment : Fragment() {
         // Retrieve and inflate the layout for this fragment
         val fragmentBinding = FragmentMovieListBinding.inflate(inflater, container, false)
         binding = fragmentBinding
+
         return fragmentBinding.root
 
     }
 
     override fun onStart() {
         super.onStart()
+
         sharedViewModel.isTopRated.value = false
         recyclerView = binding!!.recyclerView
         recyclerView.addOnScrollListener(this.onScrollListener)

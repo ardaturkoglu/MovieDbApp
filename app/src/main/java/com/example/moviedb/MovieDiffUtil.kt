@@ -16,6 +16,6 @@ class MovieDiffUtil (
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldMovies[oldItemPosition] == newMovies[newItemPosition]
+        return oldMovies[oldItemPosition].original_title == newMovies[newItemPosition].original_title && oldMovies[oldItemPosition].overview == newMovies[newItemPosition].overview
     }
 }

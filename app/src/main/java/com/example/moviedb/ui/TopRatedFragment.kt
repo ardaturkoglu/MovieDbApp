@@ -45,6 +45,7 @@ class TopRatedFragment : Fragment() {
         // Retrieve and inflate the layout for this fragment
         val fragmentBinding = FragmentTopRatedBinding.inflate(inflater, container, false)
         binding = fragmentBinding
+
         return fragmentBinding.root
 
     }
@@ -70,15 +71,15 @@ class TopRatedFragment : Fragment() {
             topRated = this@TopRatedFragment
         }
         sharedViewModel.getTopRated(sharedViewModel.ratedCurrentPage.value!!)
+        sharedViewModel.status.observe(viewLifecycleOwner, Observer {
+            when(sharedViewModel.status.value)
+            {
+                MovieApiStatus.LOADING -> Toast.makeText(context,"Movies are loading.",Toast.LENGTH_SHORT).show()
+                MovieApiStatus.ERROR -> Toast.makeText(context,"Cannot load movies.",Toast.LENGTH_SHORT).show()
+                MovieApiStatus.DONE -> Toast.makeText(context,"Movies loaded successfully.",Toast.LENGTH_SHORT).show()
+            }
+        })
 
-//        sharedViewModel.status.observe(viewLifecycleOwner, Observer {
-//            when(sharedViewModel.status.value)
-//            {
-//                MovieApiStatus.LOADING -> Toast.makeText(context,"Movies are loading...", Toast.LENGTH_SHORT).show()
-//                MovieApiStatus.ERROR -> Toast.makeText(context,"Cannot load movies.", Toast.LENGTH_SHORT).show()
-//                MovieApiStatus.DONE -> Toast.makeText(context,"Movies loaded successfully.", Toast.LENGTH_SHORT).show()
-//            }
-//        })
 
         sharedViewModel.topMovies.observe(viewLifecycleOwner, {
             (recyclerView.adapter as MovieAdapter).updateList(sharedViewModel.topMovies.value!!)
@@ -115,7 +116,7 @@ class TopRatedFragment : Fragment() {
             val topPosition = layoutManager.findFirstVisibleItemPosition()
 
             val isEnd = topPosition + visibleItems >= sizeOfCurrentList
-            val shouldPaginate = isEnd && isScrolling
+            val shouldPaginate = sharedViewModel.status.value != MovieApiStatus.LOADING  && isEnd && isScrolling
             if(shouldPaginate && (sharedViewModel.ratedCurrentPage.value!! <= sharedViewModel.ratedTotalPage.value!!))
             {
                 sharedViewModel.ratedCurrentPage.value = sharedViewModel.ratedCurrentPage.value?.plus(1)
@@ -124,6 +125,7 @@ class TopRatedFragment : Fragment() {
                 )
 
             }
+            Log.d("ardalog", sharedViewModel.ratedCurrentPage.value.toString())
         }
     }
 

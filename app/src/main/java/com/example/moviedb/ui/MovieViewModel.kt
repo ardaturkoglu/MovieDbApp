@@ -27,6 +27,7 @@ class MovieViewModel : ViewModel() {
     var isSearching = false
 
 
+
     fun getMovies(query: String,page:Int) : List<MovieInfo>? {
         viewModelScope.launch {
             status.value = MovieApiStatus.LOADING
@@ -56,10 +57,10 @@ class MovieViewModel : ViewModel() {
                 topMovies.value =
                     topMovies.value?.plus(MovieApi.retrofitService.getTopRated(page).results)
                 ratedTotalPage.value = MovieApi.retrofitService.getTopRated(page).pageTotal
-                //status.value = MovieApiStatus.DONE
+                status.value = MovieApiStatus.DONE
             } catch (e: Exception) {
                 topMovies.value = listOf()
-                //status.value = MovieApiStatus.ERROR
+                status.value = MovieApiStatus.ERROR
             }
         }
         return topMovies.value
