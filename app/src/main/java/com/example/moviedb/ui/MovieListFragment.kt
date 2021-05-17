@@ -47,10 +47,11 @@ class MovieListFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        sharedViewModel.isTopRated.value = false
         recyclerView = binding!!.recyclerView
         recyclerView.addOnScrollListener(this.onScrollListener)
         recyclerView.adapter = MovieAdapter(
-            sharedViewModel.movies.value!!
+            sharedViewModel.movies.value!!,sharedViewModel.isTopRated.value!!
         )
         recyclerView.adapter?.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
         binding?.apply {

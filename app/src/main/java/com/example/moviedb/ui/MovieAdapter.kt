@@ -2,6 +2,7 @@ package com.example.moviedb.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.NavDirections
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +11,7 @@ import com.example.moviedb.MovieDiffUtil
 import com.example.moviedb.databinding.MovieItemBinding
 import com.example.moviedb.network.MovieInfo
 
-class MovieAdapter(var movies:List<MovieInfo>) :
+class MovieAdapter(var movies:List<MovieInfo>,var isTopRated:Boolean) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     /**
      * Provides a reference for the views needed to display items in your list.
@@ -50,12 +51,23 @@ class MovieAdapter(var movies:List<MovieInfo>) :
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val movie_item = movies[position] //movies[position]
         holder.bind(movie_item)
+
         // Assigns a [OnClickListener] to the button contained in the [ViewHolder]
         holder.binding.movieItem.setOnClickListener {
+            val action: NavDirections?
             // Create an action from WordList to DetailList
             // using the required arguments
-            val action =
-                MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(movie = movie_item.original_title.orEmpty(),id = movie_item.id)
+            if(isTopRated)
+            {
+                 action =
+                    TopRatedFragmentDirections.actionTopRatedToMovieDetailFragment(movie = movie_item.original_title.orEmpty(),id = movie_item.id)
+            }
+            else
+            {
+                 action =
+                    MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(movie = movie_item.original_title.orEmpty(),id = movie_item.id)
+            }
+
             // Navigate using that action
             findNavController(it).navigate(action)
 

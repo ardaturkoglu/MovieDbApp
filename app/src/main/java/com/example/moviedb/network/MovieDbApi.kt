@@ -33,6 +33,10 @@ interface MovieDbApi {
 
     @GET("search/movie?api_key=f019202a38bce5675c2660882dd6669c&include_adult=false")
     suspend fun getMovies(@Query("query") query: String,@Query("page") page:Int):Base //
+
+    @GET("movie/top_rated?api_key=f019202a38bce5675c2660882dd6669c")
+    suspend fun getTopRated(@Query("page") page:Int):Base //
+
     @GET("movie/{id}?api_key=f019202a38bce5675c2660882dd6669c")
     suspend fun showMovieDetail(@Path("id") id: String):MovieDetail
 }
