@@ -45,7 +45,8 @@ class MovieListFragment : Fragment() {
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onStart() {
+        super.onStart()
         recyclerView = binding!!.recyclerView
         recyclerView.addOnScrollListener(this.onScrollListener)
         recyclerView.adapter = MovieAdapter(
@@ -97,6 +98,7 @@ class MovieListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -132,7 +134,7 @@ class MovieListFragment : Fragment() {
         }
     }
 
-    override fun onPause() {
+/*    override fun onPause() {
         super.onPause()
         state = recyclerView.layoutManager!!.onSaveInstanceState()
     }
@@ -140,7 +142,7 @@ class MovieListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         recyclerView.layoutManager!!.onRestoreInstanceState(state)
-    }
+    }*/
 
     }
 
