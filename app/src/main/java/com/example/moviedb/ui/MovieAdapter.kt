@@ -14,7 +14,7 @@ import com.example.moviedb.network.MovieInfo
 class MovieAdapter(var movies:List<MovieInfo>,var isTopRated:Boolean) :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     /**
-     * Provides a reference for the views needed to display items in your list.
+     * updateList to show in recyclerview.
      */
     fun updateList(newMovies: List<MovieInfo>) {
         val diffCallBack = MovieDiffUtil(movies, newMovies)
@@ -55,7 +55,7 @@ class MovieAdapter(var movies:List<MovieInfo>,var isTopRated:Boolean) :
         // Assigns a [OnClickListener] to the button contained in the [ViewHolder]
         holder.binding.movieItem.setOnClickListener {
             val action: NavDirections?
-            // Create an action from WordList to DetailList
+            // Create an action from WordList or TopRated to DetailList
             // using the required arguments
             if(isTopRated)
             {

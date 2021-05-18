@@ -1,21 +1,16 @@
 package com.example.moviedb.ui
 
 import android.os.Bundle
-import android.os.Debug
-import android.os.Parcelable
-import android.util.Log
 import android.view.*
 import android.widget.AbsListView
-import androidx.fragment.app.Fragment
-import android.widget.SearchView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.R
-import com.example.moviedb.databinding.FragmentMovieListBinding
 import com.example.moviedb.databinding.FragmentTopRatedBinding
 import com.example.moviedb.network.MovieApiStatus
 
@@ -37,6 +32,7 @@ class TopRatedFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
+    //Init binding and layout of the fragment.
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,37 +46,52 @@ class TopRatedFragment : Fragment() {
 
     }
 
+    //Update UI when fragment is visible.
     override fun onStart() {
         super.onStart()
         sharedViewModel.isTopRated.value = true
-        binding?.button?.setOnClickListener{
+        binding?.button?.setOnClickListener { //---> Search Fragment Button
             val action =
                 TopRatedFragmentDirections.actionTopRatedToMovieListFragment()
             // Navigate using that action
             Navigation.findNavController(it).navigate(action)
         }
         recyclerView = binding!!.recyclerView
-        recyclerView.addOnScrollListener(this.onScrollListener)
+        recyclerView.addOnScrollListener(this.onScrollListener) //Checks scroll position for paging.
         recyclerView.adapter = MovieAdapter(
-            sharedViewModel.topMovies.value!!,sharedViewModel.isTopRated.value!!
+            sharedViewModel.topMovies.value!!, sharedViewModel.isTopRated.value!!
         )
-        recyclerView.adapter?.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.ALLOW
+        recyclerView.adapter?.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.ALLOW
         binding?.apply {
             viewModel = sharedViewModel
             lifecycleOwner = viewLifecycleOwner
             topRated = this@TopRatedFragment
         }
-        sharedViewModel.getTopRated(sharedViewModel.ratedCurrentPage.value!!)
+        sharedViewModel.getTopRated(sharedViewModel.ratedCurrentPage.value!!) // Load top rated movies to viewModel
+
+        //If status of the API changes, show info message.
         sharedViewModel.status.observe(viewLifecycleOwner, Observer {
-            when(sharedViewModel.status.value)
-            {
-                MovieApiStatus.LOADING -> Toast.makeText(context,"Movies are loading.",Toast.LENGTH_SHORT).show()
-                MovieApiStatus.ERROR -> Toast.makeText(context,"Cannot load movies.",Toast.LENGTH_SHORT).show()
-                MovieApiStatus.DONE -> Toast.makeText(context,"Movies loaded successfully.",Toast.LENGTH_SHORT).show()
+            when (sharedViewModel.status.value) {
+                MovieApiStatus.LOADING -> Toast.makeText(
+                    context,
+                    "Movies are loading.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                MovieApiStatus.ERROR -> Toast.makeText(
+                    context,
+                    "Cannot load movies.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                MovieApiStatus.DONE -> Toast.makeText(
+                    context,
+                    "Movies loaded successfully.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
 
-
+        //If top rated movies changed, update list.
         sharedViewModel.topMovies.observe(viewLifecycleOwner, {
             (recyclerView.adapter as MovieAdapter).updateList(sharedViewModel.topMovies.value!!)
         })
@@ -99,33 +110,34 @@ class TopRatedFragment : Fragment() {
         inflater.inflate(R.menu.layout_menu, menu)
 
     }
-    private val onScrollListener =object : RecyclerView.OnScrollListener() {
+
+    private val onScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
-            if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
-            {
-                isScrolling = true
+            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                isScrolling = true //User is scrolling through list.
             }
         }
 
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val layoutManager = binding?.recyclerView?.layoutManager as GridLayoutManager
-            val sizeOfCurrentList = layoutManager.itemCount
-            val visibleItems = layoutManager.childCount
+            val sizeOfCurrentList = layoutManager.itemCount //Total size of current list
+            val visibleItems = layoutManager.childCount //Current item count on screen
             val topPosition = layoutManager.findFirstVisibleItemPosition()
 
-            val isEnd = topPosition + visibleItems >= sizeOfCurrentList
-            val shouldPaginate = sharedViewModel.status.value != MovieApiStatus.LOADING  && isEnd && isScrolling
-            if(shouldPaginate && (sharedViewModel.ratedCurrentPage.value!! <= sharedViewModel.ratedTotalPage.value!!))
-            {
-                sharedViewModel.ratedCurrentPage.value = sharedViewModel.ratedCurrentPage.value?.plus(1)
+            val isEnd =
+                topPosition + visibleItems >= sizeOfCurrentList //Check if user goes to end of current list.
+            val shouldPaginate =
+                sharedViewModel.status.value != MovieApiStatus.LOADING && isEnd && isScrolling //If not loading,user at the end of list and user is scrolling.
+            if (shouldPaginate && (sharedViewModel.ratedCurrentPage.value!! <= sharedViewModel.ratedTotalPage.value!!)) {
+                sharedViewModel.ratedCurrentPage.value =
+                    sharedViewModel.ratedCurrentPage.value?.plus(1) //Update page count.
                 sharedViewModel.getTopRated(
-                    sharedViewModel.ratedCurrentPage.value!!
+                    sharedViewModel.ratedCurrentPage.value!! //Get current page's movies.
                 )
 
             }
-            Log.d("ardalog", sharedViewModel.ratedCurrentPage.value.toString())
         }
     }
 

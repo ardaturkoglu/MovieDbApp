@@ -1,7 +1,6 @@
 package com.example.moviedb.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,13 +20,14 @@ import com.example.moviedb.network.MovieApiStatus
  */
 class MovieDetailFragment : Fragment() {
 
-    // Binding object instance corresponding to the fragment_flavor.xml layout
-    // This property is non-null between the onCreateView() and onDestroyView() lifecycle callbacks,
-    // when the view hierarchy is attached to the fragment.
-    private var binding: FragmentMovieDetailBinding? = null
-    private val sharedViewModel: MovieViewModel by activityViewModels()
+    private var binding: FragmentMovieDetailBinding? = null // Binding object of the movie detail fragment.
+    private val sharedViewModel: MovieViewModel by activityViewModels() //ViewModel of the ui.
     var genreList: String? =""
 
+    /*
+    * Init binding and layout.
+    *
+    * */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,9 +47,10 @@ class MovieDetailFragment : Fragment() {
 
         if (arguments != null) {
             val currentId: Int = MovieDetailFragmentArgs.fromBundle(requireArguments()).id
-            sharedViewModel.showMovieDetail(currentId.toString())
+            sharedViewModel.showMovieDetail(currentId.toString()) //Get movie details of the clicked movie.
         }
 
+        //Update UI with movie detail.
         sharedViewModel.movie_detail.observe(viewLifecycleOwner, Observer {
             binding?.movieDetail = sharedViewModel.movie_detail.value
             Glide.with(binding!!.root).load("https://image.tmdb.org/t/p/original/${sharedViewModel.movie_detail.value?.poster_path}").into(
@@ -59,6 +60,7 @@ class MovieDetailFragment : Fragment() {
             genreList = ""
         })
 
+        //Update Status
         sharedViewModel.status.observe(viewLifecycleOwner, Observer {
             when(sharedViewModel.status.value)
             {

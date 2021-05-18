@@ -14,24 +14,27 @@ import kotlinx.coroutines.launch
 class MovieViewModel : ViewModel() {
     // Internally, we use a MutableLiveData, because we will be updating the List of Movies
     // with new values
-    val movies = MutableLiveData<List<MovieInfo>>(listOf())
-    val topMovies = MutableLiveData<List<MovieInfo>>(listOf())
-    val searchQuery = MutableLiveData<String>()
-    val movie_detail = MutableLiveData<MovieDetail>()
-    val totalPage = MutableLiveData<Int>()
-    val ratedTotalPage = MutableLiveData<Int>()
-    val status = MutableLiveData<MovieApiStatus>()
-    val currentPage = MutableLiveData<Int>(1)
-    val ratedCurrentPage = MutableLiveData<Int>(1)
-    val isTopRated = MutableLiveData<Boolean>( false)
-    var isSearching = false
+    val movies = MutableLiveData<List<MovieInfo>>(listOf()) //Movie list for search.
+    val topMovies = MutableLiveData<List<MovieInfo>>(listOf()) //Top rated movies
+    val searchQuery = MutableLiveData<String>() //Search query
+    val movie_detail = MutableLiveData<MovieDetail>() //Movie Detail info
+    val totalPage = MutableLiveData<Int>() //Total page number of the searched movies.
+    val ratedTotalPage = MutableLiveData<Int>() //Total page number of the top rated movies.
+    val status = MutableLiveData<MovieApiStatus>()//Status of the API
+    val currentPage = MutableLiveData<Int>(1) // current shown page for the searched movie list.
+    val ratedCurrentPage = MutableLiveData<Int>(1) // current shown page for the top rated movie list.
+    val isTopRated = MutableLiveData<Boolean>( false) //True if user is looking to top rated movies.
+    var isSearching = false //Is search bar changing?
 
 
-
+/*
+* Get movies from the API according to search query and current page.
+* */
     fun getMovies(query: String,page:Int) : List<MovieInfo>? {
         viewModelScope.launch {
             status.value = MovieApiStatus.LOADING
             try {
+                //If user is not searching, do not update the movies; show the current movies.
                 if(isSearching) {
                     movies.value = MovieApi.retrofitService.getMovies(query, page).results
                 }
@@ -42,6 +45,7 @@ class MovieViewModel : ViewModel() {
                 totalPage.value = MovieApi.retrofitService.getMovies(query,page).pageTotal
                 status.value = MovieApiStatus.DONE
             } catch (e: Exception) {
+                //Show error message if request fails.
                 movies.value = listOf()
                 status.value = MovieApiStatus.ERROR
             }
@@ -49,7 +53,7 @@ class MovieViewModel : ViewModel() {
         return movies.value
 
     }
-
+    //Get top rated movies from the API.
     fun getTopRated(page:Int) : List<MovieInfo>? {
         viewModelScope.launch {
             status.value = MovieApiStatus.LOADING
@@ -66,7 +70,7 @@ class MovieViewModel : ViewModel() {
         return topMovies.value
 
     }
-
+    //Show details of the selected movie.
     fun showMovieDetail(query: String) {
         viewModelScope.launch {
             status.value = MovieApiStatus.DETAIL_LOADING
@@ -76,7 +80,6 @@ class MovieViewModel : ViewModel() {
             } catch (e: Exception) {
                 movie_detail.value = null
                 status.value = MovieApiStatus.DETAIL_ERROR
-                Log.d("ardaError",e.toString())
             }
         }
     }

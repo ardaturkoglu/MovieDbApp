@@ -31,12 +31,15 @@ private val retrofit = Retrofit.Builder()
  */
 interface MovieDbApi {
 
+    //Search Movies with user input.
     @GET("search/movie?api_key=f019202a38bce5675c2660882dd6669c&include_adult=false")
     suspend fun getMovies(@Query("query") query: String,@Query("page") page:Int):Base //
 
+    //Get top rated movies.
     @GET("movie/top_rated?api_key=f019202a38bce5675c2660882dd6669c")
     suspend fun getTopRated(@Query("page") page:Int):Base //
 
+    //Show selected movieDetail
     @GET("movie/{id}?api_key=f019202a38bce5675c2660882dd6669c")
     suspend fun showMovieDetail(@Path("id") id: String):MovieDetail
 }
