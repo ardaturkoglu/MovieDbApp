@@ -30,6 +30,7 @@ class TopRatedFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        sharedViewModel.getTopRated(sharedViewModel.ratedCurrentPage.value!!)
     }
 
     //Init binding and layout of the fragment.
@@ -47,8 +48,8 @@ class TopRatedFragment : Fragment() {
     }
 
     //Update UI when fragment is visible.
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View,savedInstanceState: Bundle?) {
+        super.onViewCreated(view,savedInstanceState)
         sharedViewModel.isTopRated.value = true
         binding?.button?.setOnClickListener { //---> Search Fragment Button
             val action =
@@ -68,8 +69,13 @@ class TopRatedFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             topRated = this@TopRatedFragment
         }
-        sharedViewModel.getTopRated(sharedViewModel.ratedCurrentPage.value!!) // Load top rated movies to viewModel
 
+         // Load top rated movies to viewModel
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         //If status of the API changes, show info message.
         sharedViewModel.status.observe(viewLifecycleOwner, Observer {
             when (sharedViewModel.status.value) {

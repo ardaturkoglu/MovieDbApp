@@ -44,8 +44,8 @@ class MovieListFragment : Fragment() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
 
         sharedViewModel.isTopRated.value = false
         recyclerView = binding!!.recyclerView
@@ -134,16 +134,6 @@ class MovieListFragment : Fragment() {
             }
         }
     }
-
-/*    override fun onPause() {
-        super.onPause()
-        state = recyclerView.layoutManager!!.onSaveInstanceState()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        recyclerView.layoutManager!!.onRestoreInstanceState(state)
-    }*/
 
     }
 
