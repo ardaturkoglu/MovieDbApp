@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -50,6 +51,7 @@ class MovieListFragment : Fragment() {
 
         sharedViewModel.isTopRated.value = false
         recyclerView = binding!!.recyclerView
+        recyclerView.addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
         recyclerView.addOnScrollListener(this.onScrollListener)
         recyclerView.adapter = MovieAdapter(
             sharedViewModel.movies.value!!,sharedViewModel.isTopRated.value!!

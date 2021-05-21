@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -59,6 +60,7 @@ class TopRatedFragment : Fragment() {
             Navigation.findNavController(it).navigate(action)
         }
         recyclerView = binding!!.recyclerView
+        recyclerView.addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
         recyclerView.addOnScrollListener(this.onScrollListener) //Checks scroll position for paging.
         recyclerView.adapter = MovieAdapter(
             sharedViewModel.topMovies.value!!, sharedViewModel.isTopRated.value!!
