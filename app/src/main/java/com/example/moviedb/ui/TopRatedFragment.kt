@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.R
 import com.example.moviedb.databinding.FragmentTopRatedBinding
@@ -127,7 +128,7 @@ class TopRatedFragment : Fragment() {
 
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            val layoutManager = binding?.recyclerView?.layoutManager as GridLayoutManager
+            val layoutManager = binding?.recyclerView?.layoutManager as LinearLayoutManager
             val sizeOfCurrentList = layoutManager.itemCount //Total size of current list
             val visibleItems = layoutManager.childCount //Current item count on screen
             val topPosition = layoutManager.findFirstVisibleItemPosition()
