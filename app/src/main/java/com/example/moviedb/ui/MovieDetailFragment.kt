@@ -1,6 +1,7 @@
 package com.example.moviedb.ui
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.BaseRequestOptions
+import com.bumptech.glide.request.RequestOptions
 import com.example.moviedb.databinding.FragmentMovieDetailBinding
 import com.example.moviedb.network.MovieApiStatus
 
@@ -23,7 +27,12 @@ class MovieDetailFragment : Fragment() {
     private var binding: FragmentMovieDetailBinding? = null // Binding object of the movie detail fragment.
     private val sharedViewModel: MovieViewModel by activityViewModels() //ViewModel of the ui.
     var genreList: String? =""
+    val path_arg : MovieDetailFragmentArgs by navArgs()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+}
     /*
     * Init binding and layout.
     *
@@ -47,14 +56,18 @@ class MovieDetailFragment : Fragment() {
 
         if (arguments != null) {
             val currentId: Int = MovieDetailFragmentArgs.fromBundle(requireArguments()).id
+            val imagePath :String = path_arg.moviePath
             sharedViewModel.showMovieDetail(currentId.toString()) //Get movie details of the clicked movie.
+            binding?.movieImage?.transitionName  = imagePath
+            Glide.with(binding!!.root).load("https://image.tmdb.org/t/p/original/${imagePath}").apply(RequestOptions.centerInsideTransform()
+                ).into(
+               binding!!.movieImage)
         }
 
         //Update UI with movie detail.
         sharedViewModel.movie_detail.observe(viewLifecycleOwner, Observer {
             binding?.movieDetail = sharedViewModel.movie_detail.value
-            Glide.with(binding!!.root).load("https://image.tmdb.org/t/p/original/${sharedViewModel.movie_detail.value?.poster_path}").into(
-                binding!!.movieImage)
+
             sharedViewModel.movie_detail.value?.genres?.forEach { genreList+= it.genre_name + " " }
             binding?.overviewText2?.text=genreList
             genreList = ""
@@ -64,6 +77,8 @@ class MovieDetailFragment : Fragment() {
         sharedViewModel.status.observe(viewLifecycleOwner, Observer {
             when(sharedViewModel.status.value)
             {
+
+
                 MovieApiStatus.DETAIL_LOADING -> Toast.makeText(context,"Movie detail is loading...", Toast.LENGTH_SHORT).show()
                 MovieApiStatus.DETAIL_ERROR -> Toast.makeText(context,"Cannot load movie details.", Toast.LENGTH_SHORT).show()
                 MovieApiStatus.DETAIL_LOADED -> Toast.makeText(context,"Movie detail loaded successfully.", Toast.LENGTH_SHORT).show()

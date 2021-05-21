@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -27,6 +28,7 @@ class MovieAdapter(var movies:List<MovieInfo>,var isTopRated:Boolean) :
     ) : RecyclerView.ViewHolder(binding.root) {
             fun bind(movieInfo: MovieInfo) {
                 binding.movieInfo= movieInfo
+                binding.imageButton.transitionName ="${binding.movieInfo!!.poster_path}"
                 Glide.with(binding.root).load("https://image.tmdb.org/t/p/original/${binding.movieInfo!!.poster_path}").into(binding.imageButton)
                 binding.executePendingBindings()
             }
@@ -55,21 +57,24 @@ class MovieAdapter(var movies:List<MovieInfo>,var isTopRated:Boolean) :
         // Assigns a [OnClickListener] to the button contained in the [ViewHolder]
         holder.binding.movieItem.setOnClickListener {
             val action: NavDirections?
+            val extras = FragmentNavigatorExtras(
+                holder.binding.imageButton to "${holder.binding.movieInfo!!.poster_path}"
+            )
             // Create an action from WordList or TopRated to DetailList
             // using the required arguments
             if(isTopRated)
             {
                  action =
-                    TopRatedFragmentDirections.actionTopRatedToMovieDetailFragment(movie = movie_item.original_title.orEmpty(),id = movie_item.id)
+                    TopRatedFragmentDirections.actionTopRatedToMovieDetailFragment(movie = movie_item.original_title.orEmpty(),id = movie_item.id,moviePath = "${holder.binding.movieInfo!!.poster_path}")
             }
             else
             {
                  action =
-                    MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(movie = movie_item.original_title.orEmpty(),id = movie_item.id)
+                    MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(movie = movie_item.original_title.orEmpty(),id = movie_item.id,moviePath ="${holder.binding.movieInfo!!.poster_path}")
             }
 
             // Navigate using that action
-            findNavController(it).navigate(action)
+            findNavController(it).navigate(action,extras)
 
         }
     }
