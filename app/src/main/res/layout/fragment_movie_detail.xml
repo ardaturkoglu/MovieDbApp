@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+    android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
     tools:context=".ui.MovieDetailFragment">
 
     <data>

@@ -31,6 +31,7 @@ class MovieDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
 }
     /*

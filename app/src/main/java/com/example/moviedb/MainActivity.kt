@@ -15,8 +15,15 @@
  */
 package com.example.moviedb
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -28,6 +35,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var navController: NavController
+    lateinit var sharedPrefs : SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +46,44 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         navController = navHostFragment.navController
         // Make sure actions in the ActionBar get propagated to the NavController
         setupActionBarWithNavController(navController)
+        sharedPrefs = getSharedPreferences("day",0)
+
     }
+
 
     /**
      * Enables back button support. Simply navigates one element up on the stack.
      */
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_switch_layout -> {
+                if(item.isChecked) {
+                    Log.d("deneme","gündüzYap")
+                    Log.d("deneme", "gündüzYap ${item.isChecked}")
+                    item.isChecked=false
+                    item.setIcon(R.drawable.ic_baseline_nights_stay_24)
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+
+
+                }
+                else {
+                    Log.d("deneme", "geceYap")
+                    Log.d("deneme", "geceYap ${item.isChecked}")
+                    item.isChecked=true
+                    item.setIcon(R.drawable.ic_baseline_wb_sunny_24)
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
+                    Log.d("deneme", "geceYap2 ${item.isChecked}")
+
+
+                }
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+
     }
 }

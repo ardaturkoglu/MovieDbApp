@@ -15,4 +15,11 @@
      limitations under the License.
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_switch_layout"
+        android:checked="false"
+        android:title="Day/Night"
+        android:icon="@drawable/ic_baseline_nights_stay_24"
+        app:showAsAction="always" />
+</menu>
