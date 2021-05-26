@@ -21,7 +21,7 @@ class MovieViewModel : ViewModel() {
     val searchQuery = MutableLiveData<String>() //Search query
     val movie_detail = MutableLiveData<MovieDetail>() //Movie Detail info
     val totalPage = MutableLiveData<Int>() //Total page number of the searched movies.
-    val status = MutableLiveData<MovieApiStatus>()//Status of the API
+    val status = MutableLiveData<MovieApiStatus>(MovieApiStatus.LOADING)//Status of the API
     val currentPage = MutableLiveData<Int>(1) // current shown page for the searched movie list.
     val ratedCurrentPage = MutableLiveData<Int>(1) // current shown page for the top rated movie list.
     var isTopRated =  true //True if user is looking to top rated movies.

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.BaseRequestOptions
@@ -82,7 +83,7 @@ class MovieDetailFragment : Fragment() {
 
 
                 MovieApiStatus.DETAIL_LOADING -> Toast.makeText(context,"Movie detail is loading...", Toast.LENGTH_SHORT).show()
-                MovieApiStatus.DETAIL_ERROR -> Toast.makeText(context,"Cannot load movie details.", Toast.LENGTH_SHORT).show()
+                MovieApiStatus.DETAIL_ERROR -> Navigation.findNavController(binding!!.root).navigate(MovieDetailFragmentDirections.actionMovieDetailFragmentToErrorFragment())
                 MovieApiStatus.DETAIL_LOADED -> Toast.makeText(context,"Movie detail loaded successfully.", Toast.LENGTH_SHORT).show()
             }
         })

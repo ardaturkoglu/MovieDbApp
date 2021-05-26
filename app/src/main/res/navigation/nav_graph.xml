@@ -34,6 +34,9 @@
         <argument
             android:name="moviePath"
             app:argType="string"/>
+        <action
+            android:id="@+id/action_movieDetailFragment_to_errorFragment"
+            app:destination="@id/errorFragment" />
     </fragment>
     <fragment
         android:id="@+id/topRated"
@@ -47,5 +50,12 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_topRated_to_errorFragment"
+            app:destination="@id/errorFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/errorFragment"
+        android:name="com.example.moviedb.ui.ErrorFragment"
+        android:label="ErrorFragment" />
 </navigation>

@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,14 +56,9 @@ class TopRatedFragment : Fragment() {
                     "Movies are loading.",
                     Toast.LENGTH_SHORT
                 ).show()
-                MovieApiStatus.ERROR ->
-                    Snackbar.make(
-                        binding!!.root,
-                        "Check your internet connection",
-                        Snackbar.LENGTH_LONG
-                    ).setAction("OK") {
-
-                    }.show()
+                MovieApiStatus.ERROR -> {
+                    Navigation.findNavController(binding!!.root).navigate(TopRatedFragmentDirections.actionTopRatedToErrorFragment())
+                }
                 MovieApiStatus.DONE -> Toast.makeText(
                     context,
                     "Movies loaded successfully.",
