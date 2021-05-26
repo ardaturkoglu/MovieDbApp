@@ -18,96 +18,102 @@
             type="com.example.moviedb.network.MovieDetail"/>
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
 
-        <ImageView
-            android:id="@+id/movie_image"
-            android:layout_width="180dp"
-            android:layout_height="200dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.033"
-            app:srcCompat="@android:drawable/ic_menu_gallery"
-            tools:src="@tools:sample/avatars"
-            android:contentDescription="@string/movieimage" />
+            <ImageView
+                android:id="@+id/movie_image"
+                android:layout_width="180dp"
+                android:layout_height="200dp"
+                android:layout_marginStart="8dp"
+                android:contentDescription="@string/movieimage"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.033"
+                app:srcCompat="@android:drawable/ic_menu_gallery"
+                tools:src="@tools:sample/avatars" />
 
-        <TextView
-            android:id="@+id/rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@{movieDetail.vote_average.toString()}"
-            android:drawableLeft="@drawable/ic_baseline_star_rate_24"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/movie_image"
-            app:layout_constraintVertical_bias="0.0"
-            tools:text="7.8" />
+            <TextView
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{movieDetail.vote_average.toString()}"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:drawableLeftCompat="@drawable/ic_baseline_star_rate_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/movie_image"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="7.8" />
 
-        <TextView
-            android:id="@+id/overViewtextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:text="@string/overview"
-            app:layout_constraintBottom_toTopOf="@+id/overview_text"
-            app:layout_constraintStart_toEndOf="@+id/movie_image" />
+            <TextView
+                android:id="@+id/overViewtextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="@string/overview"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/overview_text"
+                app:layout_constraintStart_toEndOf="@+id/movie_image" />
 
-        <TextView
-            android:id="@+id/overview_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="44dp"
-            android:layout_marginEnd="32dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:gravity="start|top"
-            android:text="@{movieDetail.overview}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/movie_image"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/overview_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="44dp"
+                android:layout_marginEnd="32dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:gravity="start|top"
+                android:text="@{movieDetail.overview}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/movie_image"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/overview_text2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="32dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:gravity="start|top"
-            android:text=""
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/movie_image"
-            app:layout_constraintTop_toBottomOf="@+id/overview_text"
-            app:layout_constraintVertical_bias="0.065" />
+            <TextView
+                android:id="@+id/overview_text2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="32dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:gravity="start|top"
+                android:text=""
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/movie_image"
+                app:layout_constraintTop_toBottomOf="@+id/overview_text"
+                app:layout_constraintVertical_bias="0.065" />
 
-        <TextView
-            android:id="@+id/genreView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:text="Genres:"
-            app:layout_constraintBottom_toTopOf="@+id/overview_text2"
-            app:layout_constraintStart_toEndOf="@+id/movie_image"
-            app:layout_constraintTop_toBottomOf="@+id/overview_text"
-            app:layout_constraintVertical_bias="1.0" />
+            <TextView
+                android:id="@+id/genreView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:text="Genres:"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/overview_text2"
+                app:layout_constraintStart_toEndOf="@+id/movie_image"
+                app:layout_constraintTop_toBottomOf="@+id/overview_text"
+                app:layout_constraintVertical_bias="1.0" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

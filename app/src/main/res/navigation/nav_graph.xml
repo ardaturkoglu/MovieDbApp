@@ -21,21 +21,6 @@
     app:startDestination="@id/topRated">
 
     <fragment
-        android:id="@+id/movieListFragment"
-        android:name="com.example.moviedb.ui.MovieListFragment"
-        android:label="Search Movies">
-        <action
-            android:id="@+id/action_movieListFragment_to_movieDetailFragment"
-            app:destination="@id/movieDetailFragment" />
-        <action
-            android:id="@+id/action_movieListFragment_to_movieDetailFragment2"
-            app:destination="@id/movieDetailFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-    </fragment>
-    <fragment
         android:id="@+id/movieDetailFragment"
         android:name="com.example.moviedb.ui.MovieDetailFragment"
         android:label="@string/movie_label"
@@ -55,13 +40,6 @@
         android:name="com.example.moviedb.ui.TopRatedFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_top_rated" >
-        <action
-            android:id="@+id/action_topRated_to_movieListFragment"
-            app:destination="@id/movieListFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_topRated_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment"

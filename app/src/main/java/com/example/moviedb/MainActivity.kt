@@ -15,7 +15,9 @@
  */
 package com.example.moviedb
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -45,8 +47,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         navController = navHostFragment.navController
         // Make sure actions in the ActionBar get propagated to the NavController
         setupActionBarWithNavController(navController)
-        //setHasOptionsMenu(true)
-
     }
 
 
@@ -60,8 +60,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         return when (item.itemId) {
             R.id.action_switch_layout -> {
                 if(item.isChecked) {
-                    Log.d("deneme","gündüzYap")
-                    Log.d("deneme", "gündüzYap ${item.isChecked}")
                     item.isChecked=false
                     item.setIcon(R.drawable.ic_baseline_nights_stay_24)
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
@@ -69,14 +67,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
                 }
                 else {
-                    Log.d("deneme", "geceYap")
-                    Log.d("deneme", "geceYap ${item.isChecked}")
                     item.isChecked=true
                     item.setIcon(R.drawable.ic_baseline_wb_sunny_24)
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
                     Log.d("deneme", "geceYap2 ${item.isChecked}")
-
-
                 }
                 true
             }
@@ -85,4 +79,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
 
     }
+
+
 }

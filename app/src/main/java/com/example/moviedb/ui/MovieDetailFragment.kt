@@ -2,6 +2,7 @@ package com.example.moviedb.ui
 
 import android.os.Bundle
 import android.transition.TransitionInflater
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -31,6 +32,7 @@ class MovieDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
 }
     /*

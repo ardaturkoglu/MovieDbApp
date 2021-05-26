@@ -21,26 +21,36 @@
         android:layout_height="match_parent">
 
 
-        <Button
+        <SearchView
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search Movıes"
+            android:hapticFeedbackEnabled="true"
+            android:iconifiedByDefault="true"
+            android:orientation="horizontal"
+            android:queryHint="Search A Movie Title"
+            android:saveEnabled="true"
+            android:singleLine="true"
+            android:textAlignment="viewStart"
             app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-            app:layout_constraintEnd_toEndOf="@+id/recyclerView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.041"
+            app:layout_constraintStart_toEndOf="@+id/textView3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="11dp"
-            android:text="Top Rated Movies:"
+            android:text="@{viewModel.text}"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/recyclerView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Top Rated:" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

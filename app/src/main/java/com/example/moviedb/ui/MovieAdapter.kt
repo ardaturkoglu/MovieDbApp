@@ -62,16 +62,8 @@ class MovieAdapter(var movies:List<MovieInfo>,var isTopRated:Boolean) :
             )
             // Create an action from WordList or TopRated to DetailList
             // using the required arguments
-            if(isTopRated)
-            {
                  action =
                     TopRatedFragmentDirections.actionTopRatedToMovieDetailFragment(movie = movie_item.original_title.orEmpty(),id = movie_item.id,moviePath = "${holder.binding.movieInfo!!.poster_path}")
-            }
-            else
-            {
-                 action =
-                    MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(movie = movie_item.original_title.orEmpty(),id = movie_item.id,moviePath ="${holder.binding.movieInfo!!.poster_path}")
-            }
 
             // Navigate using that action
             findNavController(it).navigate(action,extras)
