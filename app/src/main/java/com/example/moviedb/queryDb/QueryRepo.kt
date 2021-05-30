@@ -2,7 +2,7 @@ package com.example.moviedb.queryDb
 
 class QueryRepo(private val dao : QueryDAO) {
 
-   // var queries = dao.getAllQueries()
+    var queries = dao.getAllQueries()
     val lastQueries = dao.getLastQueries()
 
     suspend fun insert(query: QueryItem) {

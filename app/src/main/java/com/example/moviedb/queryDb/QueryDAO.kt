@@ -20,6 +20,7 @@ interface QueryDAO {
     @Query("SELECT * FROM (SELECT * FROM query_table ORDER BY qid ASC LIMIT 10) ORDER BY qid DESC")
     fun getLastQueries(): LiveData<List<QueryItem>>
 
-    //@Query("SELECT * FROM query_table")
-    //fun getAllQueries(): MutableLiveData<List<QueryItem>>
+    @Query("SELECT * FROM query_table")
+    fun getAllQueries(): LiveData<List<QueryItem>>
+
 }

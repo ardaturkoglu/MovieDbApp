@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,8 +20,10 @@ import com.example.moviedb.R
 import com.example.moviedb.databinding.FragmentTopRatedBinding
 import com.example.moviedb.network.MovieApiStatus
 import com.example.moviedb.queryDb.QueryDatabase
+import com.example.moviedb.queryDb.QueryItem
 import com.example.moviedb.queryDb.QueryRepo
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_top_rated.*
 
 /**
  * A simple [Fragment] subclass.
@@ -30,7 +33,7 @@ import com.google.android.material.snackbar.Snackbar
 class TopRatedFragment : Fragment() {
     private var binding: FragmentTopRatedBinding? = null
 
-    private val sharedViewModel: MovieViewModel by activityViewModels()
+    private lateinit var sharedViewModel:MovieViewModel
     private var isScrolling = false
 
     private lateinit var recyclerView: RecyclerView
@@ -40,7 +43,8 @@ class TopRatedFragment : Fragment() {
         setHasOptionsMenu(true)
         val dao = QueryDatabase.getInstance(requireContext()).queryDAO
         val repository = QueryRepo(dao)
-
+        val factory = MovieViewModelFactory(repository)
+        sharedViewModel = ViewModelProvider(this,factory).get(MovieViewModel::class.java)
 
     }
 
@@ -53,6 +57,13 @@ class TopRatedFragment : Fragment() {
         // Retrieve and inflate the layout for this fragment
         val fragmentBinding = FragmentTopRatedBinding.inflate(inflater, container, false)
         binding = fragmentBinding
+        binding?.apply {
+            viewModel = sharedViewModel
+            lifecycleOwner = viewLifecycleOwner
+             topRated= this@TopRatedFragment
+        }
+        sharedViewModel.getAll()
+        //binding!!.searchRecycler.adapter = QueryAdapter(sharedViewModel.recents.value!!)
         sharedViewModel.status.observe(viewLifecycleOwner, Observer {
             when (sharedViewModel.status.value) {
                 MovieApiStatus.LOADING -> Toast.makeText(
@@ -73,6 +84,9 @@ class TopRatedFragment : Fragment() {
         sharedViewModel.movies.observe(viewLifecycleOwner, {
             (recyclerView.adapter as MovieAdapter).updateList(sharedViewModel.movies.value!!)
         })
+        sharedViewModel.recents.observe(viewLifecycleOwner,{
+            search_recycler.adapter = QueryAdapter(sharedViewModel.recents.value!!)
+        })
         return fragmentBinding.root
 
     }
@@ -89,6 +103,10 @@ class TopRatedFragment : Fragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
+        binding!!.searchRecycler.addItemDecoration(
+            DividerItemDecoration(
+                this.context,
+                DividerItemDecoration.VERTICAL))
         if(sharedViewModel.isTopRated && savedInstanceState==null)
             sharedViewModel.getTopRated(sharedViewModel.ratedCurrentPage.value!!)
         recyclerView.addOnScrollListener(this.onScrollListener) //Checks scroll position for paging.
@@ -97,11 +115,6 @@ class TopRatedFragment : Fragment() {
         )
         recyclerView.adapter?.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.ALLOW
-        binding?.apply {
-            viewModel = sharedViewModel
-            lifecycleOwner = viewLifecycleOwner
-            topRated = this@TopRatedFragment
-        }
         binding!!.textView3.text = sharedViewModel.text
         searchView?.setOnSearchClickListener {
             //binding!!.textView3.visibility = INVISIBLE
@@ -112,11 +125,23 @@ class TopRatedFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        binding?.clearButton?.setOnClickListener { sharedViewModel.clearAll() }
+        binding!!.button.setOnSearchClickListener { binding!!.searchRecycler.visibility = VISIBLE
+        binding!!.clearButton.visibility = VISIBLE}
+        binding!!.button.setOnCloseListener( object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                binding!!.searchRecycler.visibility = GONE
+                binding!!.clearButton.visibility = GONE
+                return true
+            }
+        })
         binding!!.button.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 sharedViewModel.searchQuery.value = query.toString()
                 if (query != null && query != "") {
-                    //sharedViewModel.recents?.add(query)
+                    val newQuery = QueryItem(0,query)
+                    sharedViewModel.insert(newQuery)
+                    Log.d("deneme","${sharedViewModel.recents.value}")
                 }
                 return true
             }
@@ -124,6 +149,8 @@ class TopRatedFragment : Fragment() {
             override fun onQueryTextChange(p0: String?): Boolean {
                 //Start filtering the list as user start entering the characters
                 sharedViewModel.text="Searching:"
+                binding!!.searchRecycler.visibility = VISIBLE
+                binding!!.clearButton.visibility = VISIBLE
                 binding!!.textView3.text=sharedViewModel.text
                 sharedViewModel.isSearching = true
                 sharedViewModel.isTopRated = false
@@ -148,12 +175,8 @@ class TopRatedFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
-        Log.d("deneme","destroyed")
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-    }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.layout_menu, menu)
 

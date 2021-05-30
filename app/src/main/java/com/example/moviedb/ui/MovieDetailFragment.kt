@@ -2,20 +2,20 @@ package com.example.moviedb.ui
 
 import android.os.Bundle
 import android.transition.TransitionInflater
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.BaseRequestOptions
 import com.bumptech.glide.request.RequestOptions
 import com.example.moviedb.R
 import com.example.moviedb.databinding.FragmentMovieDetailBinding
 import com.example.moviedb.network.MovieApiStatus
+import com.example.moviedb.queryDb.QueryDatabase
+import com.example.moviedb.queryDb.QueryRepo
 
 
 /**
@@ -26,14 +26,17 @@ import com.example.moviedb.network.MovieApiStatus
 class MovieDetailFragment : Fragment() {
 
     private var binding: FragmentMovieDetailBinding? = null // Binding object of the movie detail fragment.
-    private val sharedViewModel: MovieViewModel by activityViewModels() //ViewModel of the ui.
+    private lateinit var sharedViewModel: MovieViewModel //ViewModel of the ui.
     var genreList: String? =""
     val path_arg : MovieDetailFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
+        val dao = QueryDatabase.getInstance(requireContext()).queryDAO
+        val repository = QueryRepo(dao)
+        val factory = MovieViewModelFactory(repository)
+        sharedViewModel = ViewModelProvider(this,factory).get(MovieViewModel::class.java)
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
 }
     /*

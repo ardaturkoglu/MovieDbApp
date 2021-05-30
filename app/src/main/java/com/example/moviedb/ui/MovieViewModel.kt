@@ -1,5 +1,6 @@
 package com.example.moviedb.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,7 +21,7 @@ class MovieViewModel(private val repository: QueryRepo) : ViewModel() {
     // Internally, we use a MutableLiveData, because we will be updating the List of Movies
     // with new values
     val movies = MutableLiveData<List<MovieInfo>>(listOf()) //Movie list for search.
-    val searchQuery = MutableLiveData<String>() //Search query
+    var searchQuery = MutableLiveData<String>() //Search query
     val movie_detail = MutableLiveData<MovieDetail?>() //Movie Detail info
     val totalPage = MutableLiveData<Int>() //Total page number of the searched movies.
     val status = MutableLiveData<MovieApiStatus>(MovieApiStatus.LOADING)//Status of the API
@@ -96,6 +97,7 @@ class MovieViewModel(private val repository: QueryRepo) : ViewModel() {
 
     fun insert(query: QueryItem)= viewModelScope.launch {
         repository.insert(query)
+        Log.d("deneme","inserted $query")
     }
 
     fun update(query: QueryItem) = viewModelScope.launch {
@@ -104,10 +106,15 @@ class MovieViewModel(private val repository: QueryRepo) : ViewModel() {
 
     fun delete(query: QueryItem) = viewModelScope.launch {
         repository.delete(query)
+        Log.d("deneme","Silindi? $query")
+        Log.d("deneme","Silindi-lastVersion? ${recents.value}")
     }
 
     fun clearAll()=viewModelScope.launch {
         repository.deleteAll()
+    }
+    fun getAll() = viewModelScope.launch {
+        recents = repository.queries
     }
     fun getRecent()=viewModelScope.launch {
         recents = repository.lastQueries
