@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
         return when (item.itemId) {
             R.id.action_switch_layout -> {
                 if(item.isChecked) {

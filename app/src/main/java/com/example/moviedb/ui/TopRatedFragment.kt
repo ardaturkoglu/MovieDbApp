@@ -1,5 +1,7 @@
 package com.example.moviedb.ui
 
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -103,6 +105,7 @@ class TopRatedFragment : Fragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
+
         binding!!.searchRecycler.addItemDecoration(
             DividerItemDecoration(
                 this.context,

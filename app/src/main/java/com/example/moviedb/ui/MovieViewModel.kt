@@ -30,6 +30,7 @@ class MovieViewModel(private val repository: QueryRepo) : ViewModel() {
     var isTopRated =  true //True if user is looking to top rated movies.
     var isSearching = false //Is search bar changing?
     var text ="Top Rated Movies:"
+    var isNight = MutableLiveData(false)
     lateinit var recents :LiveData<List<QueryItem>>
 
 /*
