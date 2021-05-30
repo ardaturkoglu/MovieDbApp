@@ -9,8 +9,10 @@
         <entry key="app/src/main/res/layout/fragment_error.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_movie_detail.xml" value="0.10099381595881529" />
         <entry key="app/src/main/res/layout/fragment_movie_list.xml" value="0.13728470111448834" />
+        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.16668747138561485" />
         <entry key="app/src/main/res/layout/fragment_top_rated.xml" value="0.22" />
         <entry key="app/src/main/res/layout/movie_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/query_item.xml" value="0.33" />
         <entry key="app/src/main/res/layout/switch_item.xml" value="0.1" />
         <entry key="app/src/main/res/menu/layout_menu.xml" value="0.28229166666666666" />
       </map>

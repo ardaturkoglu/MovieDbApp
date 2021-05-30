@@ -1,9 +1,6 @@
 package com.example.moviedb.ui
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.util.Log
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,15 +8,20 @@ import com.example.moviedb.network.MovieApi
 import com.example.moviedb.network.MovieApiStatus
 import com.example.moviedb.network.MovieDetail
 import com.example.moviedb.network.MovieInfo
+import com.example.moviedb.queryDb.QueryItem
+import com.example.moviedb.queryDb.QueryRepo
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import android.util.Patterns
+import androidx.lifecycle.*
 
 
-class MovieViewModel : ViewModel() {
+class MovieViewModel(private val repository: QueryRepo) : ViewModel() {
     // Internally, we use a MutableLiveData, because we will be updating the List of Movies
     // with new values
     val movies = MutableLiveData<List<MovieInfo>>(listOf()) //Movie list for search.
     val searchQuery = MutableLiveData<String>() //Search query
-    val movie_detail = MutableLiveData<MovieDetail>() //Movie Detail info
+    val movie_detail = MutableLiveData<MovieDetail?>() //Movie Detail info
     val totalPage = MutableLiveData<Int>() //Total page number of the searched movies.
     val status = MutableLiveData<MovieApiStatus>(MovieApiStatus.LOADING)//Status of the API
     val currentPage = MutableLiveData<Int>(1) // current shown page for the searched movie list.
@@ -27,7 +29,7 @@ class MovieViewModel : ViewModel() {
     var isTopRated =  true //True if user is looking to top rated movies.
     var isSearching = false //Is search bar changing?
     var text ="Top Rated Movies:"
-
+    lateinit var recents :LiveData<List<QueryItem>>
 
 /*
 * Get movies from the API according to search query and current page.
@@ -92,4 +94,22 @@ class MovieViewModel : ViewModel() {
         }
     }
 
+    fun insert(query: QueryItem)= viewModelScope.launch {
+        repository.insert(query)
+    }
+
+    fun update(query: QueryItem) = viewModelScope.launch {
+        repository.update(query)
+    }
+
+    fun delete(query: QueryItem) = viewModelScope.launch {
+        repository.delete(query)
+    }
+
+    fun clearAll()=viewModelScope.launch {
+        repository.deleteAll()
+    }
+    fun getRecent()=viewModelScope.launch {
+        recents = repository.lastQueries
+        }
 }

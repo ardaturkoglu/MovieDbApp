@@ -6,6 +6,7 @@ import android.view.*
 import android.view.View.*
 import android.widget.AbsListView
 import android.widget.SearchView
+import android.widget.SimpleCursorAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.R
 import com.example.moviedb.databinding.FragmentTopRatedBinding
 import com.example.moviedb.network.MovieApiStatus
+import com.example.moviedb.queryDb.QueryDatabase
+import com.example.moviedb.queryDb.QueryRepo
 import com.google.android.material.snackbar.Snackbar
 
 /**
@@ -29,13 +32,14 @@ class TopRatedFragment : Fragment() {
 
     private val sharedViewModel: MovieViewModel by activityViewModels()
     private var isScrolling = false
-    private var recents : MutableList<String>? = null
 
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        val dao = QueryDatabase.getInstance(requireContext()).queryDAO
+        val repository = QueryRepo(dao)
 
 
     }
@@ -69,7 +73,6 @@ class TopRatedFragment : Fragment() {
         sharedViewModel.movies.observe(viewLifecycleOwner, {
             (recyclerView.adapter as MovieAdapter).updateList(sharedViewModel.movies.value!!)
         })
-
         return fragmentBinding.root
 
     }
@@ -109,13 +112,11 @@ class TopRatedFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        //If status of the API changes, show info message.
-
         binding!!.button.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 sharedViewModel.searchQuery.value = query.toString()
                 if (query != null && query != "") {
-                    recents?.add(query)
+                    //sharedViewModel.recents?.add(query)
                 }
                 return true
             }
