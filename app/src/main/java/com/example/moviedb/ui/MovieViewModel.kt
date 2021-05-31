@@ -98,7 +98,6 @@ class MovieViewModel(private val repository: QueryRepo) : ViewModel() {
 
     fun insert(query: QueryItem)= viewModelScope.launch {
         repository.insert(query)
-        Log.d("deneme","inserted $query")
     }
 
     fun update(query: QueryItem) = viewModelScope.launch {
@@ -107,8 +106,7 @@ class MovieViewModel(private val repository: QueryRepo) : ViewModel() {
 
     fun delete(query: QueryItem) = viewModelScope.launch {
         repository.delete(query)
-        Log.d("deneme","Silindi? $query")
-        Log.d("deneme","Silindi-lastVersion? ${recents.value}")
+
     }
 
     fun clearAll()=viewModelScope.launch {

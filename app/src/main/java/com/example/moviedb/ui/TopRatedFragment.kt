@@ -64,8 +64,17 @@ class TopRatedFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
              topRated= this@TopRatedFragment
         }
+        //sharedViewModel.clearAll()
         sharedViewModel.getAll()
-        //binding!!.searchRecycler.adapter = QueryAdapter(sharedViewModel.recents.value!!)
+
+        sharedViewModel.isNight.observe(viewLifecycleOwner,{
+            if(sharedViewModel.isNight.value == true)
+                binding!!.searchRecycler.setBackgroundColor(Color.BLACK)
+            else if (sharedViewModel.isNight.value == false)
+                binding!!.searchRecycler.setBackgroundColor(Color.WHITE)
+        })
+
+
         sharedViewModel.status.observe(viewLifecycleOwner, Observer {
             when (sharedViewModel.status.value) {
                 MovieApiStatus.LOADING -> Toast.makeText(
@@ -86,6 +95,7 @@ class TopRatedFragment : Fragment() {
         sharedViewModel.movies.observe(viewLifecycleOwner, {
             (recyclerView.adapter as MovieAdapter).updateList(sharedViewModel.movies.value!!)
         })
+
         sharedViewModel.recents.observe(viewLifecycleOwner,{
             search_recycler.adapter = QueryAdapter(sharedViewModel.recents.value!!)
         })
@@ -96,7 +106,6 @@ class TopRatedFragment : Fragment() {
     //Update UI when fragment is visible.
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("deneme","created")
         val searchView : SearchView? = binding?.button
         recyclerView = binding!!.recyclerView
         recyclerView.addItemDecoration(
@@ -110,8 +119,12 @@ class TopRatedFragment : Fragment() {
             DividerItemDecoration(
                 this.context,
                 DividerItemDecoration.VERTICAL))
+
+
         if(sharedViewModel.isTopRated && savedInstanceState==null)
             sharedViewModel.getTopRated(sharedViewModel.ratedCurrentPage.value!!)
+
+
         recyclerView.addOnScrollListener(this.onScrollListener) //Checks scroll position for paging.
         recyclerView.adapter = MovieAdapter(
             sharedViewModel.movies.value!!, sharedViewModel.isTopRated
@@ -144,7 +157,6 @@ class TopRatedFragment : Fragment() {
                 if (query != null && query != "") {
                     val newQuery = QueryItem(0,query)
                     sharedViewModel.insert(newQuery)
-                    Log.d("deneme","${sharedViewModel.recents.value}")
                 }
                 return true
             }
@@ -220,4 +232,5 @@ class TopRatedFragment : Fragment() {
         }
 
     }
+
 }

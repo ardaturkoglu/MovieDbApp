@@ -34,10 +34,6 @@ class MyViewHolder(val binding: FragmentSearchBinding): RecyclerView.ViewHolder(
     fun bind(query: QueryItem){
         binding.queryInfo = query
         binding.textView4.text = query.query_name
-        //binding.imageView.setOnClickListener{
-            Log.d("deneme","Silme butonu")
-
-        //}
 
         binding.executePendingBindings()
     }
