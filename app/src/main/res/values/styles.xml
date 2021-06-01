@@ -18,5 +18,11 @@
     <style name="Widget.Words.TextView" parent="Widget.MaterialComponents.TextView">
         <item name="android:textAppearance">?attr/textAppearanceHeadline4</item>
     </style>
+    <style name="RecyclerViewDay">
+        <item name="android:background"> @color/icons</item>
+    </style>
+    <style name="RecyclerViewNight">
+        <item name="android:background"> @color/black</item>
+    </style>
 
 </resources>
