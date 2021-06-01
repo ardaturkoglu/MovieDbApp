@@ -33,6 +33,10 @@ class MovieViewModel(private val repository: QueryRepo) : ViewModel() {
     var isNight = MutableLiveData(false)
     lateinit var recents :LiveData<List<QueryItem>>
 
+    init{
+        getTopRated(ratedCurrentPage.value!!)
+    }
+
 /*
 * Get movies from the API according to search query and current page.
 * */

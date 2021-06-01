@@ -36,7 +36,7 @@ class MovieDetailFragment : Fragment() {
         val dao = QueryDatabase.getInstance(requireContext()).queryDAO
         val repository = QueryRepo(dao)
         val factory = MovieViewModelFactory(repository)
-        sharedViewModel = ViewModelProvider(this,factory).get(MovieViewModel::class.java)
+        sharedViewModel = ViewModelProvider(requireActivity(),factory).get(MovieViewModel::class.java)
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
 }
     /*

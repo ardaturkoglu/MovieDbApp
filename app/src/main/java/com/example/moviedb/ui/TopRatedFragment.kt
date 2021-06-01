@@ -46,7 +46,7 @@ class TopRatedFragment : Fragment() {
         val dao = QueryDatabase.getInstance(requireContext()).queryDAO
         val repository = QueryRepo(dao)
         val factory = MovieViewModelFactory(repository)
-        sharedViewModel = ViewModelProvider(this,factory).get(MovieViewModel::class.java)
+        sharedViewModel = ViewModelProvider(requireActivity(),factory).get(MovieViewModel::class.java)
 
     }
 
@@ -67,12 +67,12 @@ class TopRatedFragment : Fragment() {
         //sharedViewModel.clearAll()
         sharedViewModel.getAll()
 
-        sharedViewModel.isNight.observe(viewLifecycleOwner,{
+       /* sharedViewModel.isNight.observe(viewLifecycleOwner,{
             if(sharedViewModel.isNight.value == true)
                 binding!!.searchRecycler.setBackgroundColor(Color.BLACK)
             else if (sharedViewModel.isNight.value == false)
                 binding!!.searchRecycler.setBackgroundColor(Color.WHITE)
-        })
+        })*/
 
 
         sharedViewModel.status.observe(viewLifecycleOwner, Observer {
@@ -121,8 +121,8 @@ class TopRatedFragment : Fragment() {
                 DividerItemDecoration.VERTICAL))
 
 
-        if(sharedViewModel.isTopRated && savedInstanceState==null)
-            sharedViewModel.getTopRated(sharedViewModel.ratedCurrentPage.value!!)
+       // if(sharedViewModel.isTopRated && savedInstanceState==null)
+            //sharedViewModel.getTopRated(sharedViewModel.ratedCurrentPage.value!!)
 
 
         recyclerView.addOnScrollListener(this.onScrollListener) //Checks scroll position for paging.
